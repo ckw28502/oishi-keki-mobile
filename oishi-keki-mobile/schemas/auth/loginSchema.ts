@@ -12,12 +12,10 @@ import * as yup from "yup";
 const loginSchema = yup.object({
     username: yup
       .string()
-      .required("Nama pengguna wajib diisi!")
-      .min(1, "Nama pengguna wajib diisi!"),
+      .required("Nama pengguna wajib diisi!"),
     password: yup
       .string()
       .required("Kata sandi wajib diisi!")
-      .min(1, "Kata sandi wajib diisi!")
 });
 
 export default loginSchema;
