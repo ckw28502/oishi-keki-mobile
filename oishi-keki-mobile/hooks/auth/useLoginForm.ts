@@ -1,3 +1,4 @@
+import { sendLoginRequest } from "@/api/auth";
 import loginSchema from "@/schemas/auth/loginSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Control, FieldErrors, useForm } from "react-hook-form";
@@ -9,27 +10,39 @@ type LoginFormData = InferType<typeof loginSchema>;
 /**
  * Custom hook to manage login form state and validation using react-hook-form and Yup.
  * 
- * - Uses Yup schema (`loginSchema`) for validation via `yupResolver`.
- * - Provides `control` for form inputs, `errors` for validation errors, and `onSubmit` handler.
- * - Logs submitted form data to the console.
+ * @param {(errorMessage: string) => void} onApiError - Callback to handle API error messages.
  * 
  * @returns {{
  *   control: Control<LoginFormData>;
  *   errors: FieldErrors<LoginFormData>;
  *   onSubmit: () => void;
  * }} Object containing control, errors, and onSubmit handler for the login form.
+ * 
+ * @example
+ * const { control, errors, onSubmit } = useLoginForm((error) => setApiError(error));
  */
-const useLoginForm = (): {
+const useLoginForm = (onApiError: (errorMessage: string) => void): {
     control: Control<LoginFormData>;
     errors: FieldErrors<LoginFormData>;
     onSubmit: () => void;
 } => {
-  const { control, formState: { errors }, handleSubmit } = useForm({
+  // Initialize react-hook-form with Yup resolver for validation
+  const { control, formState: { errors }, handleSubmit } = useForm<LoginFormData>({
     resolver: yupResolver(loginSchema),
   });
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
+  /**
+   * Handles form submission.
+   * Sends login request to API and calls onApiError callback if API returns error.
+   */
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const result = await sendLoginRequest(data);
+      console.log(result);
+    } catch (err: any) {
+      // Extract error message from API response and notify parent
+      onApiError(err.response?.data?.message || "Unknown error occurred");
+    }
   });
 
   return {

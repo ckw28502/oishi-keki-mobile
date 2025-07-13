@@ -1,23 +1,42 @@
 import TextInputPassword from "@/Components/TextInputs/TextInputPassword";
 import useLoginForm from "@/hooks/auth/useLoginForm";
-import { JSX } from "react";
+import { JSX, useState } from "react";
 import { Controller } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
-import { Button, HelperText, Text, TextInput } from "react-native-paper";
+import { Button, HelperText, Portal, Snackbar, Text, TextInput } from "react-native-paper";
 
 /**
- * LoginScreen component renders a login form with username and password fields.
- * 
- * - Uses React Hook Form for form state management and validation.
- * - Uses React Native Paper for UI components and styling.
- * - Displays error messages under inputs using HelperText.
- * - Password input supports visibility toggle through a custom TextInputPassword component.
- * 
+ * LoginScreen component renders the login UI for the application.
+ *
+ * Features:
+ * - Controlled inputs using `react-hook-form`.
+ * - Schema-based validation (Yup) for `username` and `password`.
+ * - Custom password input with show/hide functionality.
+ * - Displays validation and API error messages using `HelperText` and `Snackbar`.
+ *
  * @component
- * @returns {JSX.Element} The login screen UI.
+ * @returns {JSX.Element} Login screen component.
  */
 const LoginScreen = (): JSX.Element => {
-  const { control, errors, onSubmit } = useLoginForm();
+  const [apiError, setApiError] = useState("");
+
+  /**
+   * Callback to set an API error message, passed to the `useLoginForm` hook.
+   *
+   * @param {string} errorMessage - The error message to display in the Snackbar.
+   */
+  const onApiError = (errorMessage: string) => {
+    setApiError(errorMessage);
+  };
+
+  const { control, errors, onSubmit } = useLoginForm(onApiError);
+
+  /**
+   * Clears the current API error.
+   */
+  const clearApiError = () => {
+    setApiError("");
+  };
 
   return (
     <View style={styles.container}>
@@ -65,6 +84,20 @@ const LoginScreen = (): JSX.Element => {
           Masuk
         </Button>
       </View>
+
+      <Portal>
+        <Snackbar
+          visible={!!apiError}
+          onDismiss={clearApiError}
+          duration={3000}
+          action={{
+            label: "tutup",
+            onPress: clearApiError,
+          }}
+        >
+          {apiError}
+        </Snackbar>
+      </Portal>
     </View>
   );
 };
