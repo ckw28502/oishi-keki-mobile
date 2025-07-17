@@ -53,6 +53,7 @@ const TextInputPassword = ({
       style={style}
       onChangeText={onChangeText}
       onBlur={onBlur}
+      autoCapitalize="none"
       value={value}
     />
   );

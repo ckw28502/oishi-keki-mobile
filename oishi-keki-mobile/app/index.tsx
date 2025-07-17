@@ -10,5 +10,5 @@ import { JSX } from "react";
  * @returns {JSX.Element} The login screen component.
  */
 export default function Index(): JSX.Element {
-  return LoginScreen();
+  return <LoginScreen />;
 }

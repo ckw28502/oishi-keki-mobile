@@ -1,5 +1,6 @@
 import { sendLoginRequest } from "@/api/auth";
 import loginSchema from "@/schemas/auth/loginSchema";
+import { saveTokens } from "@/utils/secureStore";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Control, FieldErrors, useForm } from "react-hook-form";
 import { InferType } from "yup";
@@ -32,18 +33,27 @@ const useLoginForm = (onApiError: (errorMessage: string) => void): {
   });
 
   /**
-   * Handles form submission.
-   * Sends login request to API and calls onApiError callback if API returns error.
+   * Handles form submission for the login form.
+   * 
+   * - Sends login credentials to the backend via `sendLoginRequest`.
+   * - On success, extracts and saves the access and refresh tokens using `saveTokens`.
+   * - On failure, extracts the error message (if available) and invokes the `onApiError` callback to display it.
+   * 
+   * @async
+   * @function
    */
   const onSubmit = handleSubmit(async (data) => {
     try {
       const result = await sendLoginRequest(data);
-      console.log(result);
+      const { accessToken, refreshToken } = result.data;
+      await saveTokens(accessToken, refreshToken);
+
     } catch (err: any) {
       // Extract error message from API response and notify parent
       onApiError(err.response?.data?.message || "Unknown error occurred");
     }
   });
+
 
   return {
     control,

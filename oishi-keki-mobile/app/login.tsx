@@ -55,6 +55,7 @@ const LoginScreen = (): JSX.Element => {
               style={styles.textInput}
               onBlur={onBlur}
               onChangeText={onChange}
+              autoCapitalize="none"
               value={value}
             />
           )}
