@@ -9,7 +9,7 @@ const colors = {
   primary: "#351d17",
 
   /** Default text color used in most components */
-  text: "#715444"
+  text: "#715444"   
 };
 
 export default colors;

@@ -1,9 +1,11 @@
 import TextInputPassword from "@/Components/TextInputs/TextInputPassword";
 import useLoginForm from "@/hooks/auth/useLoginForm";
+import { Image } from 'expo-image';
 import { JSX, useState } from "react";
 import { Controller } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
 import { Button, HelperText, Portal, Snackbar, Text, TextInput } from "react-native-paper";
+
 
 /**
  * LoginScreen component renders the login UI for the application.
@@ -40,6 +42,14 @@ const LoginScreen = (): JSX.Element => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Image 
+          source={{ uri: "logo" }}
+          placeholder="hi"
+          style={styles.logo}
+        />
+      </View>
+
       <View style={styles.titleContainer}>
         <Text variant="displayLarge">MASUK</Text>
       </View>
@@ -106,15 +116,24 @@ const LoginScreen = (): JSX.Element => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: 20,
+    gap: 20
+  },
+  logoContainer: {
+    flex: 4,
+    alignItems: "center",
+    justifyContent: "flex-end"
+  },
+  logo: {
+    width: 100,
+    height: 100
   },
   titleContainer: {
-    flex: 2,
+    flex: 4,
     alignItems: "center",
     justifyContent: "flex-end",
   },
   inputContainer: {
-    flex: 4,
+    flex: 9,
     alignItems: "center",
   },
   textInput: {

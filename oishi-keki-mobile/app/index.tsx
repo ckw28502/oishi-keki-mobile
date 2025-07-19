@@ -1,6 +1,7 @@
 import LoginScreen from "@/app/login";
 import theme from "@/theme";
 import { JSX } from "react";
+import { StyleSheet, View } from "react-native";
 import { PaperProvider } from "react-native-paper";
 
 /**
@@ -16,7 +17,16 @@ export default function Index(): JSX.Element {
   return (
     // Provides the custom Paper theme to all React Native Paper components
     <PaperProvider theme={theme}>
-      <LoginScreen />
+      <View style={styles.background}>
+        <LoginScreen />
+      </View>
     </PaperProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    backgroundColor: "#f5f1e9"
+  }
+});

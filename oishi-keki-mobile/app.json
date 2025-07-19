@@ -40,6 +40,14 @@
         {
           "configureAndroidBackup": true
         }
+      ],
+      [
+        "expo-asset",
+        {
+          "assets": [
+            "./assets/images/logo.png"
+          ]
+        }
       ]
     ],
     "experiments": {
