@@ -1,5 +1,6 @@
 import LoginScreen from "@/app/login";
 import theme from "@/theme";
+import colors from "@/theme/colors";
 import { JSX } from "react";
 import { StyleSheet, View } from "react-native";
 import { PaperProvider } from "react-native-paper";
@@ -27,6 +28,6 @@ export default function Index(): JSX.Element {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: "#f5f1e9"
+    backgroundColor: colors.backgroundColor
   }
 });

@@ -4,7 +4,7 @@ import { Image } from 'expo-image';
 import { JSX, useState } from "react";
 import { Controller } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
-import { Button, HelperText, Portal, Snackbar, Text, TextInput } from "react-native-paper";
+import { Button, HelperText, Portal, Snackbar, TextInput } from "react-native-paper";
 
 
 /**
@@ -48,10 +48,6 @@ const LoginScreen = (): JSX.Element => {
           placeholder="hi"
           style={styles.logo}
         />
-      </View>
-
-      <View style={styles.titleContainer}>
-        <Text variant="displayLarge">MASUK</Text>
       </View>
 
       <View style={styles.inputContainer}>
@@ -115,8 +111,7 @@ const LoginScreen = (): JSX.Element => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    gap: 20
+    flex: 1
   },
   logoContainer: {
     flex: 4,
@@ -124,23 +119,19 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end"
   },
   logo: {
-    width: 100,
-    height: 100
-  },
-  titleContainer: {
-    flex: 4,
-    alignItems: "center",
-    justifyContent: "flex-end",
+    width: "70%",
+    height: "80%",
   },
   inputContainer: {
-    flex: 9,
-    alignItems: "center",
+    flex: 3,
+    alignItems: "center"
   },
   textInput: {
-    width: "80%",
+    width: "80%"
   },
   button: {
     width: "60%",
+    fontSize: 80
   },
 });
 

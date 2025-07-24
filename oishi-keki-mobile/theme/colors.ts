@@ -9,7 +9,10 @@ const colors = {
   primary: "#351d17",
 
   /** Default text color used in most components */
-  text: "#715444"   
+  text: "#715444",
+  
+  /** Background color for the app, providing a neutral base */
+  backgroundColor: "#f5f1e9" 
 };
 
 export default colors;
