@@ -1,5 +1,6 @@
 import { sendLoginRequest } from "@/api/auth";
 import loginSchema from "@/schemas/auth/loginSchema";
+import { showSnackbar } from "@/stores/snackbarStore";
 import { saveTokens } from "@/utils/secureStore";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Control, FieldErrors, useForm } from "react-hook-form";
@@ -11,8 +12,6 @@ type LoginFormData = InferType<typeof loginSchema>;
 /**
  * Custom hook to manage login form state and validation using react-hook-form and Yup.
  * 
- * @param {(errorMessage: string) => void} onApiError - Callback to handle API error messages.
- * 
  * @returns {{
  *   control: Control<LoginFormData>;
  *   errors: FieldErrors<LoginFormData>;
@@ -20,9 +19,9 @@ type LoginFormData = InferType<typeof loginSchema>;
  * }} Object containing control, errors, and onSubmit handler for the login form.
  * 
  * @example
- * const { control, errors, onSubmit } = useLoginForm((error) => setApiError(error));
+ * const { control, errors, onSubmit } = useLoginForm();
  */
-const useLoginForm = (onApiError: (errorMessage: string) => void): {
+const useLoginForm = (): {
     control: Control<LoginFormData>;
     errors: FieldErrors<LoginFormData>;
     onSubmit: () => void;
@@ -37,7 +36,7 @@ const useLoginForm = (onApiError: (errorMessage: string) => void): {
    * 
    * - Sends login credentials to the backend via `sendLoginRequest`.
    * - On success, extracts and saves the access and refresh tokens using `saveTokens`.
-   * - On failure, extracts the error message (if available) and invokes the `onApiError` callback to display it.
+   * - On failure, extracts the error message (if available) and invokes the `showSnackbar` callback to display it.
    * 
    * @async
    * @function
@@ -50,7 +49,7 @@ const useLoginForm = (onApiError: (errorMessage: string) => void): {
 
     } catch (err: any) {
       // Extract error message from API response and notify parent
-      onApiError(err.response?.data?.message || "Unknown error occurred");
+      showSnackbar(err.response?.data?.message || "Unknown error occurred");
     }
   });
 

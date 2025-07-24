@@ -1,10 +1,10 @@
 import TextInputPassword from "@/Components/TextInputs/TextInputPassword";
 import useLoginForm from "@/hooks/auth/useLoginForm";
 import { Image } from 'expo-image';
-import { JSX, useRef, useState } from "react";
+import { JSX, useRef } from "react";
 import { Controller } from "react-hook-form";
-import { StyleSheet, TextInput, View } from "react-native";
-import { Button, TextInput as CustomTextInput, HelperText, Portal, Snackbar } from "react-native-paper";
+import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Button, TextInput as CustomTextInput, HelperText } from "react-native-paper";
 
 
 /**
@@ -20,27 +20,9 @@ import { Button, TextInput as CustomTextInput, HelperText, Portal, Snackbar } fr
  * @returns {JSX.Element} Login screen component.
  */
 const LoginScreen = (): JSX.Element => {
-  const [apiError, setApiError] = useState("");
-
   const passwordRef = useRef<TextInput | null>(null);
 
-  /**
-   * Callback to set an API error message, passed to the `useLoginForm` hook.
-   *
-   * @param {string} errorMessage - The error message to display in the Snackbar.
-   */
-  const onApiError = (errorMessage: string) => {
-    setApiError(errorMessage);
-  };
-
-  const { control, errors, onSubmit } = useLoginForm(onApiError);
-
-  /**
-   * Clears the current API error.
-   */
-  const clearApiError = () => {
-    setApiError("");
-  };
+  const { control, errors, onSubmit } = useLoginForm();
 
   return (
     <View style={styles.container}>
@@ -95,23 +77,9 @@ const LoginScreen = (): JSX.Element => {
         </HelperText>
 
         <Button mode="contained" style={styles.button} onPress={onSubmit}>
-          Masuk
+          <Text style={styles.buttonText}>MASUK</Text>
         </Button>
       </View>
-
-      <Portal>
-        <Snackbar
-          visible={!!apiError}
-          onDismiss={clearApiError}
-          duration={3000}
-          action={{
-            label: "tutup",
-            onPress: clearApiError,
-          }}
-        >
-          {apiError}
-        </Snackbar>
-      </Portal>
     </View>
   );
 };
@@ -138,8 +106,11 @@ const styles = StyleSheet.create({
   },
   button: {
     width: "60%",
-    fontSize: 80
+    paddingVertical: 5,
   },
+  buttonText: {
+    fontSize: 24
+  }
 });
 
 export default LoginScreen;
