@@ -1,10 +1,10 @@
 import TextInputPassword from "@/Components/TextInputs/TextInputPassword";
 import useLoginForm from "@/hooks/auth/useLoginForm";
 import { Image } from 'expo-image';
-import { JSX, useState } from "react";
+import { JSX, useRef, useState } from "react";
 import { Controller } from "react-hook-form";
-import { StyleSheet, View } from "react-native";
-import { Button, HelperText, Portal, Snackbar, TextInput } from "react-native-paper";
+import { StyleSheet, TextInput, View } from "react-native";
+import { Button, TextInput as CustomTextInput, HelperText, Portal, Snackbar } from "react-native-paper";
 
 
 /**
@@ -21,6 +21,8 @@ import { Button, HelperText, Portal, Snackbar, TextInput } from "react-native-pa
  */
 const LoginScreen = (): JSX.Element => {
   const [apiError, setApiError] = useState("");
+
+  const passwordRef = useRef<TextInput | null>(null);
 
   /**
    * Callback to set an API error message, passed to the `useLoginForm` hook.
@@ -55,7 +57,7 @@ const LoginScreen = (): JSX.Element => {
           name="username"
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
+            <CustomTextInput
               label="Nama pengguna"
               mode="outlined"
               style={styles.textInput}
@@ -63,6 +65,9 @@ const LoginScreen = (): JSX.Element => {
               onChangeText={onChange}
               autoCapitalize="none"
               value={value}
+              onSubmitEditing={() => passwordRef.current?.focus()}
+              submitBehavior="submit"
+              returnKeyType="next"
             />
           )}
         />
@@ -80,6 +85,8 @@ const LoginScreen = (): JSX.Element => {
               onChangeText={onChange}
               onBlur={onBlur}
               value={value}
+              ref={passwordRef}
+              returnKeyType="done"
             />
           )}
         />

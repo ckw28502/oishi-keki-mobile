@@ -1,6 +1,7 @@
-import { JSX, useEffect, useState } from "react";
-import { StyleProp, TextStyle } from "react-native";
-import { TextInput } from "react-native-paper";
+import { JSX, RefObject, useEffect, useState } from "react";
+import { ReturnKeyTypeOptions, StyleProp, TextInput, TextStyle } from "react-native";
+import { TextInput as CustomTextInput } from "react-native-paper";
+
 
 type TextInputPasswordProps = {
   /** Label text displayed above the input field */
@@ -13,6 +14,10 @@ type TextInputPasswordProps = {
   onBlur: () => void;
   /** Current value of the input field */
   value: string;
+  /** Reference to the TextInput component */
+  ref: RefObject<TextInput | null>;
+  /** Return key type for the input */
+  returnKeyType: ReturnKeyTypeOptions;
 };
 
 /**
@@ -32,6 +37,8 @@ const TextInputPassword = ({
   onChangeText,
   onBlur,
   value,
+  ref,
+  returnKeyType
 }: TextInputPasswordProps): JSX.Element => {
   const [isVisible, setVisibility] = useState(false);
   const [icon, setIcon] = useState("eye");
@@ -45,16 +52,18 @@ const TextInputPassword = ({
   }, [isVisible]);
 
   return (
-    <TextInput
+    <CustomTextInput
       label={label}
       secureTextEntry={!isVisible}
       mode="outlined"
-      right={<TextInput.Icon icon={icon} onPress={toggleVisibility} />}
+      right={<CustomTextInput.Icon icon={icon} onPress={toggleVisibility} />}
       style={style}
       onChangeText={onChangeText}
       onBlur={onBlur}
       autoCapitalize="none"
       value={value}
+      ref={ref}
+      returnKeyType={returnKeyType}
     />
   );
 };
