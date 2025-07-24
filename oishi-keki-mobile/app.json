@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "oishi-keki-mobile",
+    "name": "oishi-keki",
     "slug": "oishi-keki-mobile",
     "version": "1.0.0",
-    "orientation": "potrait",
+    "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "oishikekimobile",
     "userInterfaceStyle": "automatic",
