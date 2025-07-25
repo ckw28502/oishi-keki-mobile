@@ -16,7 +16,8 @@ const role$ = observable<Roles | null>(null);
  * - If the token is null or invalid, role will be set to null.
  * - If the token is expired based on the `exp` field, role will be set to null.
  * - If valid, the role from the payload is cast and stored in the observable.
- *
+ * @async
+ * @function
  * @param {string | null} token - The JWT access token to decode.
  */
 const setRole = async (token: string | null) => {
