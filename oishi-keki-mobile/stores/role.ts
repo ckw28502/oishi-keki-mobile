@@ -1,5 +1,5 @@
 import Roles from "@/constants/enum/role";
-import { JwtPayload } from "@/constants/types/types";
+import { JwtPayload } from "@/constants/types/jwtPayload";
 import { observable } from "@legendapp/state";
 import { jwtDecode } from "jwt-decode";
 
