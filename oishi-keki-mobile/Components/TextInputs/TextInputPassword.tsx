@@ -56,7 +56,7 @@ const TextInputPassword = ({
       label={label}
       secureTextEntry={!isVisible}
       mode="outlined"
-      right={<CustomTextInput.Icon icon={icon} onPress={toggleVisibility} />}
+      right={<CustomTextInput.Icon icon={icon} onPress={toggleVisibility} testID="toggle-password-icon" />}
       style={style}
       onChangeText={onChangeText}
       onBlur={onBlur}
@@ -64,6 +64,7 @@ const TextInputPassword = ({
       value={value}
       ref={ref}
       returnKeyType={returnKeyType}
+      testID="text-input-password"
     />
   );
 };
