@@ -7,6 +7,7 @@ import { getAccessToken } from "@/utils/secureStore";
 import { observer } from "@legendapp/state/react";
 import { JSX, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import { PaperProvider, Portal, Snackbar } from "react-native-paper";
 
 const getScreenByRole = () => {
@@ -44,26 +45,28 @@ const Index = observer((): JSX.Element => {
     initRole();
   }, []);
   return (
-    <PaperProvider theme={theme}>
-      <View style={styles.background}>
-        {getScreenByRole()}
-      </View>
+    <KeyboardProvider>
+      <PaperProvider theme={theme}>
+        <View style={styles.background}>
+          {getScreenByRole()}
+        </View>
 
-      {/* Global Snackbar component displayed when message is set */}
-      <Portal>
-        <Snackbar
-          visible={!!snackbar$.message.get()}
-          onDismiss={hideSnackbar}
-          duration={3000}
-          action={{
-            label: "tutup",
-            onPress: hideSnackbar,
-          }}
-        >
-          {snackbar$.message.get()}
-        </Snackbar>
-      </Portal>
-    </PaperProvider>
+        {/* Global Snackbar component displayed when message is set */}
+        <Portal>
+          <Snackbar
+            visible={!!snackbar$.message.get()}
+            onDismiss={hideSnackbar}
+            duration={3000}
+            action={{
+              label: "tutup",
+              onPress: hideSnackbar,
+            }}
+          >
+            {snackbar$.message.get()}
+          </Snackbar>
+        </Portal>
+      </PaperProvider>
+    </KeyboardProvider>
   );
 });
 

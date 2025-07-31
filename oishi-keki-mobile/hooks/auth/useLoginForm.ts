@@ -49,7 +49,7 @@ const useLoginForm = (): {
 
     } catch (err: any) {
       // Extract error message from API response and notify parent
-      showSnackbar(err.response?.data?.message || "Unknown error occurred");
+      showSnackbar(err.response?.data?.message || "Kesalahan tidak diketahui. Silakan coba lagi nanti.");
     }
   });
 

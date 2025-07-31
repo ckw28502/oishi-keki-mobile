@@ -4,6 +4,7 @@ import { Image } from 'expo-image';
 import { JSX, useRef } from "react";
 import { Controller } from "react-hook-form";
 import { StyleSheet, Text, TextInput, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { Button, TextInput as CustomTextInput, HelperText } from "react-native-paper";
 
 
@@ -25,7 +26,7 @@ const LoginScreen = (): JSX.Element => {
   const { control, errors, onSubmit } = useLoginForm();
 
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
       <View style={styles.logoContainer}>
         <Image 
           source={{ uri: "logo" }}
@@ -80,7 +81,7 @@ const LoginScreen = (): JSX.Element => {
           <Text style={styles.buttonText}>MASUK</Text>
         </Button>
       </View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -88,14 +89,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
+  content: {
+    flexGrow: 1
+  },
   logoContainer: {
-    flex: 4,
+    flex: 10,
     alignItems: "center",
     justifyContent: "flex-end"
   },
   logo: {
     width: "70%",
-    height: "80%",
+    height: "90%",
   },
   inputContainer: {
     flex: 3,
