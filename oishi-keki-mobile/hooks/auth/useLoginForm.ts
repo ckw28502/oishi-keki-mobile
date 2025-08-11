@@ -48,8 +48,7 @@ const useLoginForm = (): {
     try {
       const result = await sendLoginRequest(data);
       const { accessToken, refreshToken } = result.data;
-      await saveTokens(accessToken, refreshToken);
-      const role = await setRole(accessToken);
+      const role = await saveTokens(accessToken, refreshToken);
       switch (role) {
         case Roles.Owner:
           router.replace("/(owner)");
