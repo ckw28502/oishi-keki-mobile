@@ -22,7 +22,7 @@ const saveTokens = async (accessToken: string, refreshToken: string) => {
   });
 
   // After saving tokens, update the role state
-  setRole(accessToken);
+  return setRole(accessToken);
 };
 
 /**
@@ -47,7 +47,30 @@ const getRefreshToken = async (): Promise<string | null> => {
   return await SecureStore.getItemAsync(REFRESH_TOKEN_KEY);
 };
 
+/**
+ * Clears all stored authentication tokens from secure storage.
+ *
+ * This function deletes both the access token and refresh token
+ * from Expo SecureStore, effectively logging the user out from
+ * a persistent session perspective.
+ *
+ * @async
+ * @function clearTokens
+ * @returns {Promise<void>} Resolves when both tokens are removed.
+ */
+const clearTokens = async (): Promise<void> => {
+  // Remove stored access token
+  await SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY);
+
+  // Remove stored refresh token
+  await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY);
+
+  // Clear the role
+  setRole(null);
+};
+
 export {
+  clearTokens,
   getAccessToken,
   getRefreshToken,
   saveTokens

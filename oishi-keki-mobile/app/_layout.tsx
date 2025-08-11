@@ -1,22 +1,81 @@
+import Roles from "@/constants/enum/role";
+import { role$, setRole } from "@/stores/role";
+import { hideSnackbar, snackbar$ } from "@/stores/snackbarStore";
+import theme from "@/theme";
+import { getAccessToken } from "@/utils/secureStore";
+import { observer } from "@legendapp/state/react";
 import { Stack } from "expo-router";
-import { JSX } from "react";
-import { PaperProvider } from "react-native-paper";
+import { JSX, useEffect } from "react";
+import { KeyboardProvider } from "react-native-keyboard-controller";
+import { PaperProvider, Portal, Snackbar } from "react-native-paper";
 
 /**
- * RootLayout sets up the global layout for the application.
+ * RootLayout
  * 
- * - Wraps the app with React Native Paper's theme provider.
- * - Defines the navigation stack using `expo-router`.
+ * The main application layout component for the React Native app.
  * 
- * @returns {JSX.Element} The root layout with navigation and theming applied.
+ * Responsibilities:
+ * - Initializes the user's role based on the saved access token in secure storage.
+ * - Wraps the entire app in providers for:
+ *   - Keyboard handling (`KeyboardProvider`).
+ *   - UI theming (`PaperProvider` with React Native Paper).
+ * - Defines navigation using `expo-router`'s `Stack`:
+ *   - Routes inside `(owner)` are accessible only if a role exists (`role$` truthy).
+ *   - Routes inside `(login)` are accessible only if no role exists (`role$` falsy).
+ * - Displays a global Snackbar for app-wide notifications.
+ * 
+ * @component
+ * @returns {JSX.Element} The root layout component with navigation, theming, and global UI features.
  */
-export default function RootLayout(): JSX.Element {
+const RootLayout = observer((): JSX.Element => {
+  useEffect(() => {
+    // On initial mount, retrieve the access token and set the role in state
+    const initRole = async () => {
+      const token = await getAccessToken();
+      await setRole(token);
+    };
+
+    initRole();
+  }, []);
+
   return (
-    <PaperProvider>
-      <Stack>
-        {/* Hides the header for the index screen */}
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-      </Stack>
-    </PaperProvider>
+    <KeyboardProvider>
+      <PaperProvider theme={theme}>
+        <Stack>
+          {/* Protected route for authenticated users (owner role) */}
+          <Stack.Protected guard={role$.get() ===  Roles.Owner}>
+            <Stack.Screen
+              name="(owner)"
+              options={{ headerShown: false }}
+            />
+          </Stack.Protected>
+
+          {/* Protected route for unauthenticated users (login screen) */}
+          <Stack.Protected guard={!role$.get()}>
+            <Stack.Screen
+              name="(login)"
+              options={{ headerShown: false }}
+            />
+          </Stack.Protected>
+        </Stack>
+
+        {/* Global Snackbar for showing messages across the app */}
+        <Portal>
+          <Snackbar
+            visible={!!snackbar$.message.get()}
+            onDismiss={hideSnackbar}
+            duration={3000}
+            action={{
+              label: "tutup", // "close" in Indonesian
+              onPress: hideSnackbar,
+            }}
+          >
+            {snackbar$.message.get()}
+          </Snackbar>
+        </Portal>
+      </PaperProvider>
+    </KeyboardProvider>
   );
-}
+});
+
+export default RootLayout;

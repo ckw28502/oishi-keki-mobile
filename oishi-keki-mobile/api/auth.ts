@@ -1,7 +1,7 @@
 import LoginDTO from "@/dto/auth/loginDTO";
 import axiosInstance from "@/utils/axios";
 
-const apiUrl = "/auth";
+const apiUrl = "/auths";
 
 /**
  * Sends a login request to the API.
@@ -14,6 +14,6 @@ const sendLoginRequest = async (payload: LoginDTO): Promise<import('axios').Axio
 };
 
 export {
-    sendLoginRequest
+  sendLoginRequest
 };
 

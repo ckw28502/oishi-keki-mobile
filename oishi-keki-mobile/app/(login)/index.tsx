@@ -1,5 +1,6 @@
-import TextInputPassword from "@/Components/TextInputs/TextInputPassword";
+import TextInputPassword from "@/components/inputs/TextInputPassword";
 import useLoginForm from "@/hooks/auth/useLoginForm";
+import colors from "@/theme/colors";
 import { Image } from 'expo-image';
 import { JSX, useRef } from "react";
 import { Controller } from "react-hook-form";
@@ -20,7 +21,7 @@ import { Button, TextInput as CustomTextInput, HelperText } from "react-native-p
  * @component
  * @returns {JSX.Element} Login screen component.
  */
-const LoginScreen = (): JSX.Element => {
+const SignIn = (): JSX.Element => {
   const passwordRef = useRef<TextInput | null>(null);
 
   const { control, errors, onSubmit } = useLoginForm();
@@ -30,7 +31,7 @@ const LoginScreen = (): JSX.Element => {
       <View style={styles.logoContainer}>
         <Image 
           source={{ uri: "logo" }}
-          placeholder="hi"
+          placeholder="logo.png"
           style={styles.logo}
         />
       </View>
@@ -90,7 +91,8 @@ const styles = StyleSheet.create({
     flex: 1
   },
   content: {
-    flexGrow: 1
+    flexGrow: 1,
+    backgroundColor: colors.backgroundColor
   },
   logoContainer: {
     flex: 10,
@@ -117,4 +119,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default LoginScreen;
+export default SignIn;

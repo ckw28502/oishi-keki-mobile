@@ -1,8 +1,11 @@
 import { sendLoginRequest } from "@/api/auth";
+import Roles from "@/constants/enum/role";
 import loginSchema from "@/schemas/auth/loginSchema";
+import { setRole } from "@/stores/role";
 import { showSnackbar } from "@/stores/snackbarStore";
 import { saveTokens } from "@/utils/secureStore";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { router } from "expo-router";
 import { Control, FieldErrors, useForm } from "react-hook-form";
 import { InferType } from "yup";
 
@@ -35,7 +38,7 @@ const useLoginForm = (): {
    * Handles form submission for the login form.
    * 
    * - Sends login credentials to the backend via `sendLoginRequest`.
-   * - On success, extracts and saves the access and refresh tokens using `saveTokens`.
+   * - On success, extracts and saves the access and refresh tokens using `saveTokens` and redirect to appropriate routes.
    * - On failure, extracts the error message (if available) and invokes the `showSnackbar` callback to display it.
    * 
    * @async
@@ -46,6 +49,15 @@ const useLoginForm = (): {
       const result = await sendLoginRequest(data);
       const { accessToken, refreshToken } = result.data;
       await saveTokens(accessToken, refreshToken);
+      const role = await setRole(accessToken);
+      switch (role) {
+        case Roles.Owner:
+          router.replace("/(owner)");
+          break;
+        case Roles.Employee:
+          router.replace("/(employee)");
+          break;
+      }
 
     } catch (err: any) {
       // Extract error message from API response and notify parent

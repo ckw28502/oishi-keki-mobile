@@ -38,6 +38,8 @@ const setRole = async (token: string | null) => {
 
     // Set role from decoded payload
     role$.set(payload.role as Roles);
+
+    return role$.get();
 };
 
 export {
