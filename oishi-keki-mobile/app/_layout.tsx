@@ -1,3 +1,4 @@
+import LogoutButton from "@/components/buttons/Logout";
 import Roles from "@/constants/enum/role";
 import { dialog$, hideDialog } from "@/stores/dialogStore";
 import { role$, setRole } from "@/stores/roleStore";
@@ -31,10 +32,15 @@ SplashScreen.preventAutoHideAsync();
  * 
  */
 const Stacks = observer(() => {
+  const authenticatedHeader = { 
+    title: "",
+    headerRight: () => <LogoutButton />
+  }
+
   return (
     <Stack>
       <Stack.Protected guard={role$.get() === Roles.Owner}>
-        <Stack.Screen name="(owner)" options={{ headerShown: false }} />
+        <Stack.Screen name="(owner)" options={authenticatedHeader} />
       </Stack.Protected>
 
       <Stack.Protected guard={!role$.get()}>
@@ -86,6 +92,7 @@ const CustomSnackbar = observer(() => {
 });
 
 /**
+ * 
  * Global dialog bound to `dialog$`.
  * Visible when `title` exists. Executes `onAction` when confirmed.
  * 
