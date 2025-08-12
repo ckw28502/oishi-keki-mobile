@@ -1,3 +1,4 @@
+import { showDialog } from "@/stores/dialogStore";
 import { clearTokens } from "@/utils/secureStore";
 import { useRouter } from "expo-router";
 import { Button, Icon } from "react-native-paper";
@@ -5,27 +6,40 @@ import { Button, Icon } from "react-native-paper";
 /**
  * LogoutButton component.
  *
- * Renders a button that logs out the user by:
- * 1. Clearing authentication tokens from secure storage.
- * 2. Resetting the global `role` state to `null`.
- * 3. Navigating the user to the login screen.
+ * Renders a button that prompts the user to confirm logging out.
+ * If confirmed, it:
+ * 1. Clears authentication tokens from secure storage.
+ * 2. Navigates the user to the login screen.
  *
- * This is typically used in a header, menu, or other
+ * This button is typically used in a header, menu, or other
  * easily accessible location in the app.
  *
- * @returns {JSX.Element} A button with a logout icon.
+ * @returns {JSX.Element} A button with a logout icon that triggers a logout confirmation dialog.
  */
 const LogoutButton = () => {
     const router = useRouter();
 
     /**
-     * Handles the logout process:
-     * - Clears saved tokens.
-     * - Redirects to the login screen.
+     * Performs the logout process by:
+     * - Removing stored authentication tokens from secure storage.
+     * - Redirecting the user to the login screen.
      */
-    const handlePress = async () => {
-        await clearTokens();   // Remove stored authentication tokens
-        router.replace("/(login)"); // Navigate to login screen
+    const logout = async () => {
+        await clearTokens();            // Remove stored authentication tokens
+        router.replace("/(login)");     // Navigate to login screen
+    };
+
+    /**
+     * Handles button press by showing a confirmation dialog.
+     * If the user confirms, the `logout` function is executed.
+     */
+    const handlePress = () => {
+        showDialog(
+            "Keluar dari aplikasi",
+            "Apakah Anda yakin mau keluar dari aplikasi?",
+            "Keluar",
+            logout
+        );
     };
 
     return (

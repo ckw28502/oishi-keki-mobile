@@ -1,5 +1,5 @@
 import Roles from "@/constants/enum/role";
-import { setRole } from "@/stores/role";
+import { setRole } from "@/stores/roleStore";
 import * as SecureStore from "expo-secure-store";
 
 const ACCESS_TOKEN_KEY = "com.oishikeki.accessToken";

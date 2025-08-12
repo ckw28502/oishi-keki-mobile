@@ -1,5 +1,6 @@
 import Roles from "@/constants/enum/role";
-import { role$, setRole } from "@/stores/role";
+import { dialog$, hideDialog } from "@/stores/dialogStore";
+import { role$, setRole } from "@/stores/roleStore";
 import { hideSnackbar, snackbar$ } from "@/stores/snackbarStore";
 import theme from "@/theme";
 import { getAccessToken } from "@/utils/secureStore";
@@ -8,37 +9,102 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { JSX, useEffect, useState } from "react";
 import { KeyboardProvider } from "react-native-keyboard-controller";
-import { PaperProvider, Portal, Snackbar } from "react-native-paper";
+import { Button, Dialog, PaperProvider, Portal, Snackbar, Text } from "react-native-paper";
 
+// Configure splash screen behavior
 SplashScreen.setOptions({
   duration: 1000,
   fade: true
 });
-
 SplashScreen.preventAutoHideAsync();
 
 /**
- * RootLayout
- * 
- * The main application layout component for the React Native app.
- * 
- * Responsibilities:
- * - Initializes the user's role based on the saved access token in secure storage.
- * - Wraps the entire app in providers for:
- *   - Keyboard handling (`KeyboardProvider`).
- *   - UI theming (`PaperProvider` with React Native Paper).
- * - Defines navigation using `expo-router`'s `Stack`:
- *   - Routes inside `(owner)` are accessible only if the role is owner.
- *   - Routes inside `(login)` are accessible only if no role exists (`role$` falsy).
- * - Displays a global Snackbar for app-wide notifications.
- * 
- * @component
- * @returns {JSX.Element} The root layout component with navigation, theming, and global UI features.
+ * Stacks
+ *
+ * Defines navigation structure with protected routes based on `role$`.
+ * - `(owner)` routes require `Roles.Owner`.
+ * - `(login)` routes require no active role (logged out).
  */
-const RootLayout = observer((): JSX.Element => {
+const Stacks = observer(() => {
+  return (
+    <Stack>
+      <Stack.Protected guard={role$.get() === Roles.Owner}>
+        <Stack.Screen name="(owner)" options={{ headerShown: false }} />
+      </Stack.Protected>
+
+      <Stack.Protected guard={!role$.get()}>
+        <Stack.Screen name="(login)" options={{ headerShown: false }} />
+      </Stack.Protected>
+    </Stack>
+  );
+});
+
+/**
+ * Global snackbar bound to `snackbar$`.
+ * Shows when a message exists, hides automatically after 3s or when dismissed.
+ */
+const CustomSnackbar = observer(() => {
+  return (
+    <Snackbar
+      visible={!!snackbar$.message.get()}
+      onDismiss={hideSnackbar}
+      duration={3000}
+      action={{
+        label: "tutup", // "close" in Indonesian
+        onPress: hideSnackbar,
+      }}
+    >
+      {snackbar$.message.get()}
+    </Snackbar>
+  );
+});
+
+/**
+ * Global dialog bound to `dialog$`.
+ * Visible when `title` exists. Executes `onAction` when confirmed.
+ */
+const CustomDialog = observer(() => {
+  return (
+    <Dialog visible={!!dialog$.title.get()} onDismiss={hideDialog}>
+      <Dialog.Title>{dialog$.title.get()}</Dialog.Title>
+      <Dialog.Content>
+        <Text variant="bodyMedium">{dialog$.message.get()}</Text>
+      </Dialog.Content>
+      <Dialog.Actions>
+        <Button onPress={hideDialog}>Batal</Button>
+        <Button onPress={dialog$.onAction}>{dialog$.actionTitle.get()}</Button>
+      </Dialog.Actions>
+    </Dialog>
+  );
+});
+
+/** Wraps global snackbar and dialog in a portal */
+const CustomPortal = () => (
+  <Portal>
+    <CustomSnackbar />
+    <CustomDialog />
+  </Portal>
+);
+
+/**
+ * RootLayout
+ *
+ * Entry point of the app.
+ *
+ * Responsibilities:
+ * 1. Load stored access token and update `role$`.
+ * 2. Keep splash screen until role check is complete.
+ * 3. Provide app-wide providers:
+ *    - Keyboard handling
+ *    - Theming (React Native Paper)
+ * 4. Render navigation (`Stacks`) and global UI (`CustomPortal`).
+ *
+ * @returns {JSX.Element} App layout wrapper.
+ */
+const RootLayout = (): JSX.Element => {
   const [roleChecked, setRoleChecked] = useState(false);
+
   useEffect(() => {
-    // On initial mount, retrieve the access token and set the role in state
     const initRole = async () => {
       const token = await getAccessToken();
       await setRole(token);
@@ -49,48 +115,16 @@ const RootLayout = observer((): JSX.Element => {
     initRole();
   }, []);
 
-  if (!roleChecked) {
-    return <></>;
-  }
+  if (!roleChecked) return <></>;
 
   return (
     <KeyboardProvider>
       <PaperProvider theme={theme}>
-        <Stack>
-          {/* Protected route for authenticated users (owner role) */}
-          <Stack.Protected guard={role$.get() ===  Roles.Owner}>
-            <Stack.Screen
-              name="(owner)"
-              options={{ headerShown: false }}
-            />
-          </Stack.Protected>
-
-          {/* Protected route for unauthenticated users (login screen) */}
-          <Stack.Protected guard={!role$.get()}>
-            <Stack.Screen
-              name="(login)"
-              options={{ headerShown: false }}
-            />
-          </Stack.Protected>
-        </Stack>
-
-        {/* Global Snackbar for showing messages across the app */}
-        <Portal>
-          <Snackbar
-            visible={!!snackbar$.message.get()}
-            onDismiss={hideSnackbar}
-            duration={3000}
-            action={{
-              label: "tutup", // "close" in Indonesian
-              onPress: hideSnackbar,
-            }}
-          >
-            {snackbar$.message.get()}
-          </Snackbar>
-        </Portal>
+        <Stacks />
+        <CustomPortal />
       </PaperProvider>
     </KeyboardProvider>
   );
-});
+};
 
 export default RootLayout;
