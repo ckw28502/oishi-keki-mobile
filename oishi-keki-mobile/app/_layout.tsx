@@ -48,31 +48,20 @@ const Stacks = observer(() => {
  * CustomSnackbar component.
  *
  * A global Snackbar UI element bound to the `snackbar$` observable store.
- * 
- * Behavior:
- * - Automatically becomes visible when `snackbar$.message` contains text.
- * - Hides automatically after 3 seconds or when dismissed by the user.
- * - Adjusts its bottom margin dynamically to avoid being obscured by
- *   the Android keyboard by listening to keyboard show/hide events.
- *
- * Implementation details:
- * - Uses React Native's `Keyboard` API to track keyboard height.
- * - Applies a marginBottom style equal to the keyboard height plus padding.
- * - Wrapped with `observer` to reactively update when the snackbar state changes.
  *
  * @component
  * @returns {JSX.Element} The Snackbar UI element.
  */
 
 const CustomSnackbar = observer(() => {
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [marginBottom, setMarginBottom] = useState(0);
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", (e) => {
-      setKeyboardHeight(e.endCoordinates.height + 10);
+      setMarginBottom(e.endCoordinates.height + 10);
     });
     const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-      setKeyboardHeight(0);
+      setMarginBottom(0);
     });
 
     return () => {
@@ -85,7 +74,7 @@ const CustomSnackbar = observer(() => {
       visible={!!snackbar$.message.get()}
       onDismiss={hideSnackbar}
       duration={3000}
-      style={{ marginBottom: keyboardHeight }}
+      style={{ marginBottom }}
       action={{
         label: "tutup",
         onPress: hideSnackbar,
