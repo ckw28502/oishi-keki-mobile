@@ -1,5 +1,5 @@
 import TextInputPassword from "@/components/inputs/TextInputPassword";
-import useLoginForm from "@/hooks/auth/useLoginForm";
+import useLoginScreen from "@/hooks/auth/useLoginScreen";
 import colors from "@/theme/colors";
 import { Image } from 'expo-image';
 import { JSX, useRef } from "react";
@@ -24,7 +24,7 @@ import { Button, TextInput as CustomTextInput, HelperText } from "react-native-p
 const SignIn = (): JSX.Element => {
   const passwordRef = useRef<TextInput | null>(null);
 
-  const { control, errors, onSubmit } = useLoginForm();
+  const { control, errors, onSubmit } = useLoginScreen();
 
   return (
     <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">

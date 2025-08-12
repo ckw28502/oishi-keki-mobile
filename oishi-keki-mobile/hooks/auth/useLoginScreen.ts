@@ -1,7 +1,6 @@
 import { sendLoginRequest } from "@/api/auth";
 import Roles from "@/constants/enum/role";
 import loginSchema from "@/schemas/auth/loginSchema";
-import { setRole } from "@/stores/role";
 import { showSnackbar } from "@/stores/snackbarStore";
 import { saveTokens } from "@/utils/secureStore";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -24,7 +23,7 @@ type LoginFormData = InferType<typeof loginSchema>;
  * @example
  * const { control, errors, onSubmit } = useLoginForm();
  */
-const useLoginForm = (): {
+const useLoginScreen = (): {
     control: Control<LoginFormData>;
     errors: FieldErrors<LoginFormData>;
     onSubmit: () => void;
@@ -72,4 +71,4 @@ const useLoginForm = (): {
   };
 };
 
-export default useLoginForm;
+export default useLoginScreen;
