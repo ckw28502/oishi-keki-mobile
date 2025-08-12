@@ -5,9 +5,17 @@ import theme from "@/theme";
 import { getAccessToken } from "@/utils/secureStore";
 import { observer } from "@legendapp/state/react";
 import { Stack } from "expo-router";
-import { JSX, useEffect } from "react";
+import * as SplashScreen from "expo-splash-screen";
+import { JSX, useEffect, useState } from "react";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { PaperProvider, Portal, Snackbar } from "react-native-paper";
+
+SplashScreen.setOptions({
+  duration: 1000,
+  fade: true
+});
+
+SplashScreen.preventAutoHideAsync();
 
 /**
  * RootLayout
@@ -20,7 +28,7 @@ import { PaperProvider, Portal, Snackbar } from "react-native-paper";
  *   - Keyboard handling (`KeyboardProvider`).
  *   - UI theming (`PaperProvider` with React Native Paper).
  * - Defines navigation using `expo-router`'s `Stack`:
- *   - Routes inside `(owner)` are accessible only if a role exists (`role$` truthy).
+ *   - Routes inside `(owner)` are accessible only if the role is owner.
  *   - Routes inside `(login)` are accessible only if no role exists (`role$` falsy).
  * - Displays a global Snackbar for app-wide notifications.
  * 
@@ -28,15 +36,22 @@ import { PaperProvider, Portal, Snackbar } from "react-native-paper";
  * @returns {JSX.Element} The root layout component with navigation, theming, and global UI features.
  */
 const RootLayout = observer((): JSX.Element => {
+  const [roleChecked, setRoleChecked] = useState(false);
   useEffect(() => {
     // On initial mount, retrieve the access token and set the role in state
     const initRole = async () => {
       const token = await getAccessToken();
       await setRole(token);
+      setRoleChecked(true);
+      await SplashScreen.hideAsync();
     };
 
     initRole();
   }, []);
+
+  if (!roleChecked) {
+    return <></>;
+  }
 
   return (
     <KeyboardProvider>
