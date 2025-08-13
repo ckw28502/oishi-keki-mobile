@@ -7,7 +7,7 @@ const OwnerTabsLayout = () => {
             <Tabs.Screen
             name="index"
             options={{
-                title: "cakes",
+                title: "kue",
                 headerShown: false,
                 tabBarIcon: ({ color }) => {
                     return <Icon source="cake-variant" color={color} size={30} />;

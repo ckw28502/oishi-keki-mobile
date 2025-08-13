@@ -32,12 +32,6 @@ const setRole = async (token: string | null): Promise<Roles | null> => {
     // Decode the JWT payload without verifying the signature (client-side decoding)
     const payload = jwtDecode<JwtPayload>(token);
 
-    // Check for expiration (JWT exp is in seconds → convert to ms)
-    if (payload.exp * 1000 < Date.now()) {
-        role$.set(null);
-        return null;
-    }
-
     // Extract and set the role from the decoded payload
     const role = payload.role as Roles;
     role$.set(role);
