@@ -1,4 +1,4 @@
-import GetCakesDTO from "@/dto/cake/GetCakesDTO";
+import GetCakesDTO from "@/dto/cake/getCakesDTO";
 import axiosInstance from "@/utils/axios";
 
 const apiUrl = "/cakes";

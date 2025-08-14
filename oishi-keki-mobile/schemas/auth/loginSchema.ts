@@ -10,12 +10,16 @@ import * as yup from "yup";
  * Custom error messages are provided for both fields when empty.
  */
 const loginSchema = yup.object({
-    username: yup
-      .string()
+    username: yup.string()
       .required("Nama pengguna wajib diisi!"),
-    password: yup
-      .string()
+    password: yup.string()
       .required("Kata sandi wajib diisi!")
 });
 
-export default loginSchema;
+// Infer login schema type
+type LoginFormData = yup.InferType<typeof loginSchema>;
+
+export {
+  LoginFormData, loginSchema
+};
+

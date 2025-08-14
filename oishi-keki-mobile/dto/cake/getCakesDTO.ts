@@ -2,8 +2,7 @@ interface GetCakesDTO {
     page: number,
     limit: number,
     nameFilter: string,
-    sortParam: string,
-    isAscending: boolean
+    sort: string
 }
 
 export default GetCakesDTO;

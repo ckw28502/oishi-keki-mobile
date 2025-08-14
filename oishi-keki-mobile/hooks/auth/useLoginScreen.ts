@@ -1,15 +1,11 @@
 import { sendLoginRequest } from "@/api/auth";
 import Roles from "@/constants/enum/role";
-import loginSchema from "@/schemas/auth/loginSchema";
+import { LoginFormData, loginSchema } from "@/schemas/auth/loginSchema";
 import { showSnackbar } from "@/stores/snackbarStore";
 import { saveTokens } from "@/utils/secureStore";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { router } from "expo-router";
 import { Control, FieldErrors, useForm } from "react-hook-form";
-import { InferType } from "yup";
-
-// Infer login schema type
-type LoginFormData = InferType<typeof loginSchema>;
 
 /**
  * Custom hook to manage login form state and validation using react-hook-form and Yup.
