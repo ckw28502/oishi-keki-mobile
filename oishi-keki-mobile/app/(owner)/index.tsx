@@ -56,6 +56,7 @@ const CakeScreen = () => {
                                     onValueChange={onChange}
                                     prompt="Urutkan"
                                     style={styles.picker}
+                                    dropdownIconColor={theme.colors.onSurface}
                                 >
                                     {sortPickerItems}
                                 </Picker>
