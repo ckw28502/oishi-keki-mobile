@@ -3,10 +3,11 @@ import * as yup from "yup";
 
 const getCakesFilterSchema = yup.object({
     nameFilter: yup.string()
-        .required(),
+        .optional()
+        .default(""),
     sort: yup.mixed<CakeSort>()
         .oneOf(Object.values(CakeSort))
-        .required()
+        .default(CakeSort.NameASC)
 });
 
 type GetCakesFilterFormData = yup.InferType<typeof getCakesFilterSchema>;

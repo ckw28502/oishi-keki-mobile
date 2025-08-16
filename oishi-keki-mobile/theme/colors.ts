@@ -12,7 +12,9 @@ const colors = {
   text: "#715444",
   
   /** Background color for the app, providing a neutral base */
-  backgroundColor: "#f5f1e9" 
+  backgroundColor: "#f5f1e9" ,
+
+  buttonText: "#fff"
 };
 
 export default colors;
