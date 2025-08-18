@@ -1,21 +1,18 @@
-import { Tabs } from "expo-router";
-import { Icon } from "react-native-paper";
+import { Stack } from "expo-router";
 
-const OwnerTabsLayout = () => {
+const OwnerLayout = () => {
     return (
-        <Tabs>
-            <Tabs.Screen
-            name="index"
-            options={{
-                title: "kue",
-                headerShown: false,
-                tabBarIcon: ({ color }) => {
-                    return <Icon source="cake-variant" color={color} size={30} />;
-                }
-            }}
-        />
-        </Tabs>
+        <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+                name="createModal"
+                options={{
+                    presentation: "modal",
+                    headerShown: false
+                }}
+            />
+        </Stack>
     );
 }
 
-export default OwnerTabsLayout;
+export default OwnerLayout;

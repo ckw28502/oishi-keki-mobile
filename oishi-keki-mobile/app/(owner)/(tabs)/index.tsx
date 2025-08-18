@@ -1,8 +1,9 @@
-import CakeFilter from "@/components/bottom-sheets/cakeFilter/cakeFilter";
+import CakeFilter from "@/components/bottom-sheets/cakeFilter/CakeFilter";
 import Cake from "@/models/cake";
 import theme from "@/theme";
 import colors from "@/theme/colors";
 import { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { Link } from "expo-router";
 import { useCallback, useRef, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -50,13 +51,15 @@ const CakeScreen = () => {
                     /> 
                 </BottomSheetModalProvider>
             </GestureHandlerRootView>
-            <FAB
-                icon="plus"
-                size="medium"
-                style={styles.addFAB} 
-                visible={fABVisibility}
-                color={theme.colors.onPrimary}
-            />
+            <Link href={"/createModal"} style={styles.addFABLink}>
+                <FAB
+                    icon="plus"
+                    size="medium"
+                    visible={fABVisibility}
+                    color={theme.colors.onPrimary}
+                    style={styles.addFAB}
+                />
+            </Link>
         </>
     );
 }
@@ -79,10 +82,12 @@ const styles = StyleSheet.create({
     buttonText: {
         color: theme.colors.onPrimary
     },
-    addFAB: {
+    addFABLink: {
         position: "absolute",
         right: "8%",
-        bottom: "5%",
+        bottom: "5%"
+    },
+    addFAB: {
         backgroundColor: colors.primary
     }
 });
