@@ -46,7 +46,7 @@ const useLoginScreen = (): {
       const role = await saveTokens(accessToken, refreshToken);
       switch (role) {
         case Roles.Owner:
-          router.replace("/(owner)");
+          router.replace("/(owner)/(tabs)");
           break;
         case Roles.Employee:
           router.replace("/(employee)");

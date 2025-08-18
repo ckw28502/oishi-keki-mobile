@@ -1,3 +1,4 @@
+import { closeModal } from "@/common/closeModal";
 import CreateCakeDTO from "@/dto/cake/createCakeDTO";
 import theme from "@/theme";
 import colors from "@/theme/colors";
@@ -99,6 +100,11 @@ const CakeForm = ({ apiCall }: Props): JSX.Element => {
             </HelperText>
 
             {/* Submit Button */}
+            <Button mode="contained" style={{ ...styles.button, ...styles.cancelButton }} onPress={closeModal}>
+                <Text style={styles.buttonText}>BATAL</Text>
+            </Button>
+
+            {/* Submit Button */}
             <Button mode="contained" style={styles.button} onPress={onSubmit}>
                 <Text style={styles.buttonText}>KIRIM</Text>
             </Button>
@@ -112,16 +118,10 @@ const styles = StyleSheet.create({
   },
   content: {
     flexGrow: 1,
-    backgroundColor: colors.backgroundColor
-  },
-  logoContainer: {
-    flex: 10,
+    backgroundColor: colors.backgroundColor,
     alignItems: "center",
-    justifyContent: "flex-end"
-  },
-  logo: {
-    width: "70%",
-    height: "90%",
+    justifyContent: "center",
+    gap: 4
   },
   inputContainer: {
     flex: 3,
@@ -130,9 +130,13 @@ const styles = StyleSheet.create({
   textInput: {
     width: "80%"
   },
+  cancelButton: {
+    backgroundColor: theme.colors.error
+  },
   button: {
-    width: "60%",
+    width: "80%",
     paddingVertical: 5,
+    marginVertical: 5
   },
   buttonText: {
     fontSize: 24,

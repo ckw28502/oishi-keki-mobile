@@ -1,6 +1,7 @@
 import { showDialog } from "@/stores/dialogStore";
 import { clearTokens } from "@/utils/secureStore";
 import { useRouter } from "expo-router";
+import { JSX } from "react";
 import { Button, Icon } from "react-native-paper";
 
 /**
@@ -16,7 +17,7 @@ import { Button, Icon } from "react-native-paper";
  *
  * @returns {JSX.Element} A button with a logout icon that triggers a logout confirmation dialog.
  */
-const LogoutButton = () => {
+const LogoutButton = (): JSX.Element => {
     const router = useRouter();
 
     /**
