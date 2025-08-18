@@ -1,7 +1,7 @@
 import { sendGetCakesRequest } from "@/api/cake";
 import { GetCakesFilterFormData, getCakesFilterSchema } from "@/schemas/cake/getCakesFilterSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import { Control, useForm } from "react-hook-form";
 
 /**
  * Custom hook for handling cake filtering and sorting.
@@ -13,12 +13,17 @@ import { useForm } from "react-hook-form";
  * - Closes the bottom sheet after applying filters.
  *
  * @param {() => void} closeSheet - Function to dismiss the bottom sheet modal.
- * @returns {Object} Contains:
- *  - control: react-hook-form control object for input binding.
- *  - onSubmit: submit handler that fetches cakes and closes the sheet.
- *  - getCakes: function to fetch cakes with optional filter data.
+ * @returns {Object} An object containing:
+ *  @property {Control<GetCakesFilterFormData>} control - react-hook-form control object for input binding.
+ *  @property {() => void} onSubmit - Form submission handler that fetches cakes and closes the bottom sheet.
+ *  @property {(data: GetCakesFilterFormData) => Promise<void>} getCakes - Function to fetch cakes with optional filter data; increments pagination automatically.
  */
-const useCakeFilter = (closeSheet: () => void) => {
+
+const useCakeFilter = (closeSheet: () => void): {
+    control: Control<GetCakesFilterFormData>;
+    onSubmit: () => void;
+    getCakes: (data: GetCakesFilterFormData) => Promise<void>;
+} => {
     // Pagination state
     let page = 1;
     const limit = 5;
