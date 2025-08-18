@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         width: "100%"
     },
     listContainer: {
-        flex: 5
+        flex: 8
     },
     buttonText: {
         color: theme.colors.onPrimary
