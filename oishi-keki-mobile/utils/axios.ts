@@ -29,13 +29,12 @@ axiosInstance.interceptors.response.use(
                 const { accessToken, refreshToken } = result.data;
                 await saveTokens(accessToken, refreshToken);
                 return axiosInstance(originalRequest);
-            } catch (error: any) {
+            } catch (refreshError: any) {
                 await clearTokens();
                 router.replace("/(login)");
-                return Promise.reject(error);
+                return Promise.reject(refreshError);
             }
         }
-
         return Promise.reject(error);
     }
 )
