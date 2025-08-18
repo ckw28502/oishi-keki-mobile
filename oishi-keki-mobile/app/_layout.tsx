@@ -13,6 +13,7 @@ import { Keyboard } from "react-native";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { Button, Dialog, PaperProvider, Portal, Snackbar, Text } from "react-native-paper";
 
+
 // Configure splash screen behavior
 SplashScreen.setOptions({
   duration: 1000,

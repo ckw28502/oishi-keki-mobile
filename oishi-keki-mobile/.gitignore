@@ -40,3 +40,6 @@ app-example
 
 ../.idea/
 .idea/
+
+/android
+/ios
