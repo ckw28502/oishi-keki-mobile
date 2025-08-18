@@ -2,6 +2,8 @@ import CakeDTO from "@/dto/cake/cakeDTO";
 
 /**
  * Represents a Cake entity with ID, name, and price.
+ * 
+ * @class
  */
 class Cake {
     private _id: string;
@@ -11,6 +13,8 @@ class Cake {
     /**
      * Creates a new Cake instance from a CakeDTO object.
      * @param {CakeDTO} data - The data transfer object containing cake properties.
+     * 
+     * @constructor
      */
     constructor(data: CakeDTO) {
         this._id = data.id;
