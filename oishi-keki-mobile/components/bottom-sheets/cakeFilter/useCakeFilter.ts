@@ -1,6 +1,8 @@
 import { sendGetCakesRequest } from "@/api/cake";
+import Cake from "@/models/cake";
 import { GetCakesFilterFormData, getCakesFilterSchema } from "@/schemas/cake/getCakesFilterSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useCallback, useRef } from "react";
 import { Control, useForm } from "react-hook-form";
 
 /**
@@ -19,13 +21,16 @@ import { Control, useForm } from "react-hook-form";
  *  @property {(data: GetCakesFilterFormData) => Promise<void>} getCakes - Function to fetch cakes with optional filter data; increments pagination automatically.
  */
 
-const useCakeFilter = (closeSheet: () => void): {
+const useCakeFilter = (
+    closeSheet: () => void,
+    setCakes: React.Dispatch<React.SetStateAction<Cake[]>>
+): {
     control: Control<GetCakesFilterFormData>;
     onSubmit: () => void;
     getCakes: (data: GetCakesFilterFormData) => Promise<void>;
 } => {
     // Pagination state
-    let page = 1;
+    const page = useRef(1);
     const limit = 5;
 
     // Initialize react-hook-form with Yup resolver for validation
@@ -39,19 +44,30 @@ const useCakeFilter = (closeSheet: () => void): {
      * 
      * @param {GetCakesFilterFormData} data - Filter and sort data from the form.
      */
-    const getCakes = async (data: GetCakesFilterFormData) => {
-        const params = { page, limit, ...data };
-        const cakes = await sendGetCakesRequest(params);
-        page++; // Increment page for next request
-        console.log(cakes); // Replace with state update if needed
-    };
+    const getCakes = useCallback(async (data: GetCakesFilterFormData) => {
+        const params = { 
+            page: page.current, 
+            limit, 
+            ...data 
+        };
+        const newCakes = await sendGetCakesRequest(params);
+        setCakes((prev: Cake[]) => {
+            const cakes = (page.current > 1) ? [...prev, ...newCakes] : newCakes;
+
+            // Ensures there are no duplicate ID
+            return Array.from(
+                new Map(cakes.map(cake => [cake.id, cake])).values()
+            );
+        });
+        page.current++; // Increment page for next request
+    }, [page, setCakes]);
 
     /**
      * Form submission handler.
      * Resets the page to 1, fetches cakes with current form data, and closes the bottom sheet.
      */
     const onSubmit = handleSubmit(async (data) => {
-        page = 1;
+        page.current = 1;
         await getCakes(data);
         closeSheet();
     });

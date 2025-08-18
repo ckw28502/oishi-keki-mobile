@@ -1,16 +1,19 @@
 import CakeFilter from "@/components/bottom-sheets/cakeFilter/cakeFilter";
+import Cake from "@/models/cake";
 import theme from "@/theme";
 import colors from "@/theme/colors";
 import { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useCallback, useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Button, FAB, Text } from "react-native-paper";
+import { Button, FAB, List, Text } from "react-native-paper";
 
 const CakeScreen = () => {
     const cakeFilterRef = useRef<BottomSheetModal>(null);
 
     const [fABVisibility, setFABVisibility] = useState(true);
+
+    const [cakes, setCakes] = useState<Cake[]>([]);
 
     const openSheet = useCallback(() => {
         cakeFilterRef.current?.present();
@@ -33,9 +36,17 @@ const CakeScreen = () => {
                             <Text style={styles.buttonText}>Cari / Filter Kue</Text>
                         </Button>                   
                     </View>
+                    <View style={styles.listContainer}>
+                        <FlatList 
+                            data={cakes}
+                            keyExtractor={(cake) => cake.id}
+                            renderItem={({ item }) => <List.Item title={item.name} description={item.priceInRupiah} />}
+                        />
+                    </View>
                     <CakeFilter
                         ref={cakeFilterRef}
                         onSheetChange={onSheetChange}
+                        setCakes={setCakes}
                     /> 
                 </BottomSheetModalProvider>
             </GestureHandlerRootView>
@@ -59,8 +70,11 @@ const styles = StyleSheet.create({
     filterContainer: {
         flex: 1,
         justifyContent: "flex-end",
-        alignSelf: "center",
-        width: "60%"
+        alignItems: "center",
+        width: "100%"
+    },
+    listContainer: {
+        flex: 5
     },
     buttonText: {
         color: theme.colors.onPrimary

@@ -1,4 +1,5 @@
 import CakeSort from '@/constants/enum/cakeSort';
+import Cake from '@/models/cake';
 import theme from '@/theme';
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
@@ -20,6 +21,8 @@ const SORT_OPTIONS = [
 type Props = {
   /** Callback triggered when the bottom sheet index changes */
   onSheetChange: (index: number) => void;
+  /** React use state method to update cake list  */
+  setCakes: React.Dispatch<React.SetStateAction<Cake[]>>
 };
 
 /**
@@ -37,14 +40,14 @@ type Props = {
  * @param {React.Ref<BottomSheetModal>} ref - Forwarded ref for controlling the BottomSheetModal
  * @returns {JSX.Element} A BottomSheetModal containing cake filter and sort controls
  */
-const CakeFilter = forwardRef<BottomSheetModal, Props>(({ onSheetChange }, ref) => {
+const CakeFilter = forwardRef<BottomSheetModal, Props>(({ onSheetChange, setCakes }, ref) => {
   // Function to dismiss the bottom sheet programmatically
   const closeSheet = () => {
     (ref as React.RefObject<BottomSheetModal>).current?.dismiss();
   };
 
   // Custom hook to manage form state and cake fetching
-  const { control, onSubmit, getCakes } = useCakeFilter(closeSheet);
+  const { control, onSubmit, getCakes } = useCakeFilter(closeSheet, setCakes);
 
   // Bottom sheet snap points (percentage of screen height)
   const snapPoints = useMemo(() => ["40%"], []);

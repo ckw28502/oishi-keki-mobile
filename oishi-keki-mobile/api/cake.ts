@@ -5,7 +5,7 @@ import axiosInstance from "@/utils/axios";
 
 const apiUrl = "/cakes";
 
-const sendGetCakesRequest = async (params: GetCakesDTO): Promise<CakeDTO[]> => {
+const sendGetCakesRequest = async (params: GetCakesDTO): Promise<Cake[]> => {
     return await axiosInstance.get(apiUrl, { params })
         .then(res => res.data.cakes)
         .then(cakes => cakes.map((cake: CakeDTO) => new Cake(cake)));
