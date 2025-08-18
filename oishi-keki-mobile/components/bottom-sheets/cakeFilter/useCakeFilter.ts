@@ -36,9 +36,9 @@ const useCakeFilter = (closeSheet: () => void) => {
      */
     const getCakes = async (data: GetCakesFilterFormData) => {
         const params = { page, limit, ...data };
-        const result = await sendGetCakesRequest(params);
+        const cakes = await sendGetCakesRequest(params);
         page++; // Increment page for next request
-        console.log(result.data); // Replace with state update if needed
+        console.log(cakes); // Replace with state update if needed
     };
 
     /**
