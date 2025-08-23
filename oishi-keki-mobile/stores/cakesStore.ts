@@ -18,6 +18,7 @@ const CAKE_PAGE_SIZE = 5;
 const cakeList$ = observable({
     cakes: new Array<Cake>(),
     page: 1,
+    totalPages: 0,
     nameFilter: "",
     sortParam: CakeSort.NameASC
 });
@@ -33,6 +34,7 @@ const resetList = () => {
     cakeList$.set({
         cakes: [],
         page: 1,
+        totalPages: 0,
         nameFilter: "",
         sortParam: CakeSort.NameASC
     });
