@@ -1,8 +1,8 @@
 import { sendGetCakesRequest } from "@/api/cake";
-import Cake from "@/models/cake";
 import { GetCakesFilterFormData, getCakesFilterSchema } from "@/schemas/cake/getCakesFilterSchema";
+import { addCakes, CAKE_PAGE_SIZE, cakeList$, clearCakes } from "@/stores/cakesStore";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useCallback, useRef } from "react";
+import { useCallback } from "react";
 import { Control, useForm } from "react-hook-form";
 
 /**
@@ -23,16 +23,11 @@ import { Control, useForm } from "react-hook-form";
 
 const useCakeFilter = (
     closeSheet: () => void,
-    setCakes: React.Dispatch<React.SetStateAction<Cake[]>>
 ): {
     control: Control<GetCakesFilterFormData>;
     onSubmit: () => void;
     getCakes: (data: GetCakesFilterFormData) => Promise<void>;
 } => {
-    // Pagination state
-    const page = useRef(1);
-    const limit = 5;
-
     // Initialize react-hook-form with Yup resolver for validation
     const { control, handleSubmit } = useForm<GetCakesFilterFormData>({
         resolver: yupResolver(getCakesFilterSchema),
@@ -45,29 +40,22 @@ const useCakeFilter = (
      * @param {GetCakesFilterFormData} data - Filter and sort data from the form.
      */
     const getCakes = useCallback(async (data: GetCakesFilterFormData) => {
+        const page = cakeList$.page.get();
         const params = { 
-            page: page.current, 
-            limit, 
+            page,
+            limit: CAKE_PAGE_SIZE, 
             ...data 
         };
         const newCakes = await sendGetCakesRequest(params);
-        setCakes((prev: Cake[]) => {
-            const cakes = (page.current > 1) ? [...prev, ...newCakes] : newCakes;
-
-            // Ensures there are no duplicate ID
-            return Array.from(
-                new Map(cakes.map(cake => [cake.id, cake])).values()
-            );
-        });
-        page.current++; // Increment page for next request
-    }, [page, setCakes]);
+        addCakes(newCakes);
+    }, []);
 
     /**
      * Form submission handler.
-     * Resets the page to 1, fetches cakes with current form data, and closes the bottom sheet.
+     * Clear current cake list, fetches cakes with current form data, and closes the bottom sheet.
      */
     const onSubmit = handleSubmit(async (data) => {
-        page.current = 1;
+        clearCakes();
         await getCakes(data);
         closeSheet();
     });

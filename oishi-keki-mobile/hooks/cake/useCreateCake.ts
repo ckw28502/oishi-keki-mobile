@@ -1,11 +1,33 @@
 import { sendCreateCakeRequest } from "@/api/cake";
 import CreateCakeDTO from "@/dto/cake/createCakeDTO";
+import { clearCakes } from "@/stores/cakesStore";
 import { router } from "expo-router";
 
-const useCreateCake = () => {
+/**
+ * Custom hook to handle creating a new cake.
+ * 
+ * Handles:
+ *  - Sending the creation request to the backend.
+ *  - Clearing the cake list store after creation (so it can be refetched fresh).
+ *  - Navigating back to the previous screen after successful creation.
+ *
+ * @returns {Object} An object containing the `createCake` function.
+ */
+const useCreateCake = (): {
+    createCake: (data: CreateCakeDTO) => Promise<void>;
+} => {
+    
+    /**
+     * Sends a request to create a new cake.
+     * Clears the local cake list and navigates back after success.
+     *
+     * @async
+     * @param {CreateCakeDTO} data - The data for the new cake.
+     */
     const createCake = async (data: CreateCakeDTO) => {
-        const result = await sendCreateCakeRequest(data);
-        router.back();
+        await sendCreateCakeRequest(data); // Call API
+        clearCakes(); // Clear local cake store
+        router.back(); // Navigate back
     }
 
     return {

@@ -1,20 +1,19 @@
 import CakeFilter from "@/components/bottom-sheets/cakeFilter/CakeFilter";
-import Cake from "@/models/cake";
+import { cakeList$, resetList } from "@/stores/cakesStore";
 import theme from "@/theme";
 import colors from "@/theme/colors";
 import { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { observer } from "@legendapp/state/react";
 import { Link } from "expo-router";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Button, FAB, List, Text } from "react-native-paper";
 
-const CakeScreen = () => {
+const CakeScreen = observer(() => {
     const cakeFilterRef = useRef<BottomSheetModal>(null);
 
     const [fABVisibility, setFABVisibility] = useState(true);
-
-    const [cakes, setCakes] = useState<Cake[]>([]);
 
     const openSheet = useCallback(() => {
         cakeFilterRef.current?.present();
@@ -27,6 +26,10 @@ const CakeScreen = () => {
             setFABVisibility(true);
         }
     }
+
+    useEffect(() => {
+        resetList();
+    }, []);
     
     return(
         <>
@@ -39,7 +42,7 @@ const CakeScreen = () => {
                     </View>
                     <View style={styles.listContainer}>
                         <FlatList 
-                            data={cakes}
+                            data={cakeList$.cakes.get()}
                             keyExtractor={(cake) => cake.id}
                             renderItem={({ item }) => <List.Item title={item.name} description={item.priceInRupiah} />}
                         />
@@ -47,7 +50,6 @@ const CakeScreen = () => {
                     <CakeFilter
                         ref={cakeFilterRef}
                         onSheetChange={onSheetChange}
-                        setCakes={setCakes}
                     /> 
                 </BottomSheetModalProvider>
             </GestureHandlerRootView>
@@ -62,7 +64,7 @@ const CakeScreen = () => {
             </Link>
         </>
     );
-}
+})
 
 const styles = StyleSheet.create({
     container: {
