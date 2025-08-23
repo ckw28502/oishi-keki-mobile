@@ -106,7 +106,7 @@ const CakeForm = ({ apiCall }: Props): JSX.Element => {
 
             {/* Submit Button */}
             <Button mode="contained" style={styles.button} onPress={onSubmit}>
-                <Text style={styles.buttonText}>KIRIM</Text>
+                <Text style={styles.buttonText}>TAMBAH KUE</Text>
             </Button>
         </KeyboardAwareScrollView>
     );
