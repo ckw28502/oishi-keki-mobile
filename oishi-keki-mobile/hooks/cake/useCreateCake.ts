@@ -1,4 +1,5 @@
 import { sendCreateCakeRequest } from "@/api/cake";
+import { getCakes } from "@/common/cakes";
 import CreateCakeDTO from "@/dto/cake/createCakeDTO";
 import { clearCakes } from "@/stores/cakesStore";
 import { router } from "expo-router";
@@ -27,6 +28,7 @@ const useCreateCake = (): {
     const createCake = async (data: CreateCakeDTO) => {
         await sendCreateCakeRequest(data); // Call API
         clearCakes(); // Clear local cake store
+        await getCakes();
         router.back(); // Navigate back
     }
 

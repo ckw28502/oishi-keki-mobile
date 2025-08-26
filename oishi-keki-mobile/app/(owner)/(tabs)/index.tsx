@@ -1,3 +1,4 @@
+import { getCakes } from "@/common/cakes";
 import CakeFilter from "@/components/bottom-sheets/cakeFilter/CakeFilter";
 import { cakeList$, resetList } from "@/stores/cakesStore";
 import theme from "@/theme";
@@ -29,6 +30,7 @@ const CakeScreen = observer(() => {
 
     useEffect(() => {
         resetList();
+        getCakes();
     }, []);
     
     return(

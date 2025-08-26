@@ -1,10 +1,9 @@
 import CakeSort from '@/constants/enum/cakeSort';
-import { cakeList$ } from '@/stores/cakesStore';
 import theme from '@/theme';
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import { Picker } from '@react-native-picker/picker';
-import React, { forwardRef, useCallback, useEffect, useMemo } from "react";
+import React, { forwardRef, useCallback, useMemo } from "react";
 import { Controller } from 'react-hook-form';
 import { StyleSheet, View } from "react-native";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
@@ -45,7 +44,7 @@ const CakeFilter = forwardRef<BottomSheetModal, Props>(({ onSheetChange }, ref) 
   };
 
   // Custom hook to manage form state and cake fetching
-  const { control, onSubmit, getCakes } = useCakeFilter(closeSheet);
+  const { control, onSubmit } = useCakeFilter(closeSheet);
 
   // Bottom sheet snap points (percentage of screen height)
   const snapPoints = useMemo(() => ["40%"], []);
@@ -66,14 +65,6 @@ const CakeFilter = forwardRef<BottomSheetModal, Props>(({ onSheetChange }, ref) 
       {...props}
     />
   ), []);
-
-  // Fetch cakes with default filter and sort when component mounts
-  useEffect(() => {
-    getCakes({
-      nameFilter: cakeList$.nameFilter.get(),
-      sort: cakeList$.sortParam.get()
-    });
-  }, [getCakes]);
 
   return (
     <BottomSheetModal

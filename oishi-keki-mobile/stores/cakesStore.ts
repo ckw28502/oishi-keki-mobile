@@ -13,14 +13,14 @@ const CAKE_PAGE_SIZE = 5;
  * - `cakes`: currently loaded cakes
  * - `page`: current pagination page (starts at 1)
  * - `nameFilter`: filter string to match cake names
- * - `sortParam`: current sorting method (default: NameASC)
+ * - `sort`: current sorting method (default: NameASC)
  */
 const cakeList$ = observable({
     cakes: new Array<Cake>(),
     page: 1,
     totalPages: 0,
     nameFilter: "",
-    sortParam: CakeSort.NameASC
+    sort: CakeSort.NameASC
 });
 
 /**
@@ -36,7 +36,7 @@ const resetList = () => {
         page: 1,
         totalPages: 0,
         nameFilter: "",
-        sortParam: CakeSort.NameASC
+        sort: CakeSort.NameASC
     });
 };
 
