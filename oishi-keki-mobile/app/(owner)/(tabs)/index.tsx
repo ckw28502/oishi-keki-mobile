@@ -9,7 +9,43 @@ import { Link } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Button, FAB, List, Text } from "react-native-paper";
+import { Button, FAB, Icon, List, Text } from "react-native-paper";
+
+type ListItemRightProps = {
+    cakeId: string;
+}
+
+const ListItemRight = ({ cakeId }: ListItemRightProps) => {
+    return (
+        <View style={ListItemRightStyles.container}>
+            <Button
+                mode="contained"
+                style={ListItemRightStyles.editButton}
+            >
+                <Icon source="pencil" size={20} />
+            </Button>
+            <Button
+                mode="contained"
+                style={ListItemRightStyles.deleteButton}
+
+            >
+                <Icon source="delete" size={20} />
+            </Button>
+        </View>
+    );
+}
+
+const ListItemRightStyles = StyleSheet.create({
+    container: {
+        gap: 5,
+    },
+    editButton: { 
+        backgroundColor: theme.colors.secondaryContainer
+    },
+    deleteButton: { 
+        backgroundColor: theme.colors.errorContainer
+    }
+});
 
 const CakeScreen = observer(() => {
     const cakeFilterRef = useRef<BottomSheetModal>(null);
@@ -46,7 +82,13 @@ const CakeScreen = observer(() => {
                         <FlatList 
                             data={cakeList$.cakes.get()}
                             keyExtractor={(cake) => cake.id}
-                            renderItem={({ item }) => <List.Item title={item.name} description={item.priceInRupiah} />}
+                            renderItem={({ item }) => (
+                                <List.Item 
+                                    title={item.name} 
+                                    description={item.priceInRupiah}
+                                    right={() => <ListItemRight cakeId={item.id} />}
+                                />
+                            )}
                         />
                     </View>
                     <CakeFilter
@@ -81,7 +123,8 @@ const styles = StyleSheet.create({
         width: "100%"
     },
     listContainer: {
-        flex: 8
+        flex: 8,
+        gap: 10
     },
     buttonText: {
         color: theme.colors.onPrimary
