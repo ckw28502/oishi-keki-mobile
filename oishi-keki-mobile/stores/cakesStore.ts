@@ -5,7 +5,7 @@ import { observable } from "@legendapp/state";
 /**
  * Number of cakes per page for pagination.
  */
-const CAKE_PAGE_SIZE = 5;
+const CAKE_PAGE_SIZE = 10;
 
 /**
  * Observable store for managing the cake list state.

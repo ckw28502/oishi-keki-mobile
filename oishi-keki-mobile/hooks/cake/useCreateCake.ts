@@ -1,6 +1,6 @@
 import { sendCreateCakeRequest } from "@/api/cake";
 import { getCakes } from "@/common/cakes";
-import CreateCakeDTO from "@/dto/cake/createCakeDTO";
+import CakeFormDTO from "@/dto/cake/cakeFormDTO";
 import { clearCakes } from "@/stores/cakesStore";
 import { router } from "expo-router";
 
@@ -15,7 +15,7 @@ import { router } from "expo-router";
  * @returns {Object} An object containing the `createCake` function.
  */
 const useCreateCake = (): {
-    createCake: (data: CreateCakeDTO) => Promise<void>;
+    createCake: (data: CakeFormDTO) => Promise<void>;
 } => {
     
     /**
@@ -23,9 +23,9 @@ const useCreateCake = (): {
      * Clears the local cake list and navigates back after success.
      *
      * @async
-     * @param {CreateCakeDTO} data - The data for the new cake.
+     * @param {CakeFormDTO} data - The data for the new cake.
      */
-    const createCake = async (data: CreateCakeDTO) => {
+    const createCake = async (data: CakeFormDTO) => {
         await sendCreateCakeRequest(data); // Call API
         clearCakes(); // Clear local cake store
         await getCakes();

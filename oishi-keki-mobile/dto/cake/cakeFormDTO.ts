@@ -4,7 +4,7 @@
  * 
  * @interface
  */
-interface CreateCakeDTO {
+interface CakeFormDTO {
 
     /** The name of the cake */
     name: string;
@@ -13,4 +13,4 @@ interface CreateCakeDTO {
     price: number;
 }
 
-export default CreateCakeDTO;
+export default CakeFormDTO;

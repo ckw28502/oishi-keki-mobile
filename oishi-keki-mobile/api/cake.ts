@@ -1,11 +1,16 @@
 import CakeDTO from "@/dto/cake/cakeDTO";
-import CreateCakeDTO from "@/dto/cake/createCakeDTO";
+import CakeFormDTO from "@/dto/cake/cakeFormDTO";
 import GetCakesDTO from "@/dto/cake/getCakesDTO";
 import Cake from "@/models/cake";
 import { cakeList$ } from "@/stores/cakesStore";
 import axiosInstance from "@/utils/axios";
 
 const apiUrl = "/cakes";
+
+const sendGetCakeByIdRequest = async (cakeId: string): Promise<Cake> => {
+    return await axiosInstance.get(`${apiUrl}/${cakeId}`)
+        .then(res => new Cake(res.data));
+}
 
 const sendGetCakesRequest = async (params: GetCakesDTO): Promise<Cake[]> => {
     return await axiosInstance.get(apiUrl, { params })
@@ -16,11 +21,13 @@ const sendGetCakesRequest = async (params: GetCakesDTO): Promise<Cake[]> => {
         });
 }
 
-const sendCreateCakeRequest = async (reqBody: CreateCakeDTO) => {
+const sendCreateCakeRequest = async (reqBody: CakeFormDTO) => {
     return await axiosInstance.post(apiUrl, reqBody);
 }
 
-export {
-    sendCreateCakeRequest, sendGetCakesRequest
-};
+const sendEditCakeRequest = async (cakeId: string, reqBody: CakeFormDTO) => {
+    return await axiosInstance.put(`${apiUrl}/${cakeId}`, reqBody);
+}
+
+export { sendCreateCakeRequest, sendEditCakeRequest, sendGetCakeByIdRequest, sendGetCakesRequest };
 

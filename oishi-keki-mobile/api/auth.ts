@@ -1,6 +1,6 @@
 import LoginDTO from "@/dto/auth/loginDTO";
 import { getRefreshToken } from "@/utils/secureStore";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 /**
  * Default headers used for all Axios requests in this module.
@@ -52,12 +52,12 @@ const sendLoginRequest = async (payload: LoginDTO): Promise<import('axios').Axio
  *
  * @async
  * @function
- * @returns {Promise<import('axios').AxiosResponse>} A promise that resolves
+ * @returns {Promise<AxiosResponse>} A promise that resolves
  * with the Axios response containing the new access token (and optionally
  * a new refresh token, depending on the backend implementation).
  *
  */
-const sendRefreshTokenRequest = async (): Promise<import('axios').AxiosResponse> => {
+const sendRefreshTokenRequest = async (): Promise<AxiosResponse> => {
   const token = await getRefreshToken();
   return await axiosInstance.post("/refresh", {}, {
     headers: {

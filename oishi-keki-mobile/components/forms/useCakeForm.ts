@@ -1,63 +1,90 @@
-import CreateCakeDTO from "@/dto/cake/createCakeDTO";
+import { sendGetCakeByIdRequest } from "@/api/cake";
+import CakeFormDTO from "@/dto/cake/cakeFormDTO";
 import { CakeFormData, cakeSchema } from "@/schemas/cake/cakeSchema";
 import { showSnackbar } from "@/stores/snackbarStore";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Control, FieldErrors, useForm } from "react-hook-form";
 
 /**
- * Custom hook to manage the cake form state and validation
- * using `react-hook-form` with Yup schema validation.
+ * useCakeForm Hook
  *
- * Responsibilities:
- * - Initializes form state with validation schema (`cakeSchema`).
- * - Handles submission via the provided `apiCall` function.
- * - Displays an error message using the global snackbar store if API fails.
+ * Custom hook to manage the **create/edit cake form** state using `react-hook-form` and Yup validation.
  *
- * @param apiCall - Function to call the backend API to create a cake.
+ * Features:
+ * - Initializes form with empty values (for create) or fetched values (for edit, using `cakeId`).
+ * - Validates inputs with `cakeSchema`.
+ * - Submits form data through the provided `apiCall` function.
+ * - Displays snackbar errors if submission fails.
+ *
+ * @param apiCall - Function that calls the backend API (create or update a cake).
+ * @param cakeId - Optional cake ID for edit mode. If provided, pre-fills form values by fetching cake data.
  *
  * @returns {{
  *   control: Control<CakeFormData>;
  *   errors: FieldErrors<CakeFormData>;
  *   onSubmit: () => Promise<void>;
- * }} Object containing:
- * - `control`: react-hook-form control object to bind inputs.
- * - `errors`: validation errors keyed by field name.
- * - `onSubmit`: handler function to trigger validation + API call.
+ * }}
+ * - `control`: Control object to bind React Hook Form inputs.
+ * - `errors`: Validation errors keyed by field name.
+ * - `onSubmit`: Form submit handler that validates and triggers the API call.
  *
  * @example
- * const { control, errors, onSubmit } = useCakeForm(createCakeApi);
+ * const { control, errors, onSubmit } = useCakeForm(createCakeApi, cakeId);
  *
  * <Controller
  *   name="name"
  *   control={control}
  *   render={({ field }) => <TextInput {...field} />}
  * />
- * <Button onPress={onSubmit}>Submit</Button>
+ * <HelperText type="error">{errors.name?.message}</HelperText>
+ * <Button onPress={onSubmit}>Save</Button>
  */
 const useCakeForm = (
-  apiCall: (reqBody: CreateCakeDTO) => Promise<void>
+  apiCall: (reqBody: CakeFormDTO) => Promise<void>,
+  cakeId?: string | null
 ): {
   control: Control<CakeFormData>;
   errors: FieldErrors<CakeFormData>;
   onSubmit: () => Promise<void>;
 } => {
-  // Initialize react-hook-form with Yup resolver for validation
-  const { control, formState: { errors }, handleSubmit } = useForm<CakeFormData>({
+  // Initialize react-hook-form with Yup validation
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<CakeFormData>({
     resolver: yupResolver(cakeSchema),
+
+    // Async default values: empty for create, fetch cake data for edit
+    defaultValues: async () => {
+      if (!cakeId) {
+        return { name: "", price: 0 };
+      }
+
+      const cake = await sendGetCakeByIdRequest(cakeId);
+      return {
+        name: cake.name,
+        price: cake.price,
+      };
+    },
   });
 
+  // Submit handler with API call + global error handling
   const onSubmit = handleSubmit(async (data) => {
     try {
       await apiCall(data);
     } catch (error: any) {
-      showSnackbar(error.response?.data?.message || "Kesalahan tidak diketahui. Silakan coba lagi nanti.");
+      showSnackbar(
+        error.response?.data?.message ||
+          "Kesalahan tidak diketahui. Silakan coba lagi nanti."
+      );
     }
   });
 
   return {
     control,
     errors,
-    onSubmit
+    onSubmit,
   };
 };
 
