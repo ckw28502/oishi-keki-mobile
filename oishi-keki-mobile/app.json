@@ -14,7 +14,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#f5f1e9"
       },
       "edgeToEdgeEnabled": true,
       "package": "com.ckw28502.oishikekimobile",
@@ -33,7 +33,10 @@
           "image": "./assets/images/icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#f5f1e9",
+          "dark": {
+            "backgroundColor": "#f5f1e9"
+          }
         }
       ],
       [

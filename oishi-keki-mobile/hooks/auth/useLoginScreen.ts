@@ -1,13 +1,11 @@
 import { sendLoginRequest } from "@/api/auth";
-import loginSchema from "@/schemas/auth/loginSchema";
+import Roles from "@/constants/enum/role";
+import { LoginFormData, loginSchema } from "@/schemas/auth/loginSchema";
 import { showSnackbar } from "@/stores/snackbarStore";
 import { saveTokens } from "@/utils/secureStore";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { router } from "expo-router";
 import { Control, FieldErrors, useForm } from "react-hook-form";
-import { InferType } from "yup";
-
-// Infer login schema type
-type LoginFormData = InferType<typeof loginSchema>;
 
 /**
  * Custom hook to manage login form state and validation using react-hook-form and Yup.
@@ -21,7 +19,7 @@ type LoginFormData = InferType<typeof loginSchema>;
  * @example
  * const { control, errors, onSubmit } = useLoginForm();
  */
-const useLoginForm = (): {
+const useLoginScreen = (): {
     control: Control<LoginFormData>;
     errors: FieldErrors<LoginFormData>;
     onSubmit: () => void;
@@ -35,7 +33,7 @@ const useLoginForm = (): {
    * Handles form submission for the login form.
    * 
    * - Sends login credentials to the backend via `sendLoginRequest`.
-   * - On success, extracts and saves the access and refresh tokens using `saveTokens`.
+   * - On success, extracts and saves the access and refresh tokens using `saveTokens` and redirect to appropriate routes.
    * - On failure, extracts the error message (if available) and invokes the `showSnackbar` callback to display it.
    * 
    * @async
@@ -45,7 +43,15 @@ const useLoginForm = (): {
     try {
       const result = await sendLoginRequest(data);
       const { accessToken, refreshToken } = result.data;
-      await saveTokens(accessToken, refreshToken);
+      const role = await saveTokens(accessToken, refreshToken);
+      switch (role) {
+        case Roles.Owner:
+          router.replace("/(owner)/(tabs)");
+          break;
+        case Roles.Employee:
+          router.replace("/(employee)");
+          break;
+      }
 
     } catch (err: any) {
       // Extract error message from API response and notify parent
@@ -61,4 +67,4 @@ const useLoginForm = (): {
   };
 };
 
-export default useLoginForm;
+export default useLoginScreen;
