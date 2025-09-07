@@ -1,7 +1,6 @@
 import { sendEditCakeRequest } from "@/api/cake";
-import { getCakes } from "@/common/cakes";
+import { resetCakeList } from "@/common/cakes";
 import CakeFormDTO from "@/dto/cake/cakeFormDTO";
-import { clearCakes } from "@/stores/cakesStore";
 import { router } from "expo-router";
 
 /**
@@ -30,11 +29,8 @@ const useEditCake = (cakeId: string): {
         // Send API request to update cake
         await sendEditCakeRequest(cakeId, data);
 
-        // Clear local cake store to reset pagination / list
-        clearCakes();
-
-        // Refetch updated cakes from server
-        await getCakes();
+        // Clear and refetch cake list
+        resetCakeList();
 
         // Close the modal / navigate back
         router.back();

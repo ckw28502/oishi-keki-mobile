@@ -1,6 +1,6 @@
-import { getCakes } from "@/common/cakes";
+import { resetCakeList } from "@/common/cakes";
 import { GetCakesFilterFormData, getCakesFilterSchema } from "@/schemas/cake/getCakesFilterSchema";
-import { cakeList$, clearCakes } from "@/stores/cakesStore";
+import { cakeList$ } from "@/stores/cakesStore";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Control, useForm } from "react-hook-form";
 
@@ -35,10 +35,9 @@ const useCakeFilter = (
      * Clear current cake list, fetches cakes with current form data, and closes the bottom sheet.
      */
     const onSubmit = handleSubmit(async (data) => {
-        clearCakes();
         cakeList$.nameFilter.set(data.nameFilter);
         cakeList$.sort.set(data.sort);
-        await getCakes();
+        await resetCakeList();
         closeSheet();
     });
 

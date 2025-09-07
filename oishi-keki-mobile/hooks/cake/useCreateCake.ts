@@ -1,7 +1,6 @@
 import { sendCreateCakeRequest } from "@/api/cake";
-import { getCakes } from "@/common/cakes";
+import { resetCakeList } from "@/common/cakes";
 import CakeFormDTO from "@/dto/cake/cakeFormDTO";
-import { clearCakes } from "@/stores/cakesStore";
 import { router } from "expo-router";
 
 /**
@@ -27,8 +26,7 @@ const useCreateCake = (): {
      */
     const createCake = async (data: CakeFormDTO) => {
         await sendCreateCakeRequest(data); // Call API
-        clearCakes(); // Clear local cake store
-        await getCakes();
+        await resetCakeList(); // Clear and refetch cake list
         router.back(); // Navigate back
     }
 

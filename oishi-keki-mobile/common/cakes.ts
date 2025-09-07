@@ -27,6 +27,20 @@ const getCakes = async (): Promise<void> => {
 };
 
 /**
+ * Resets the cake list by clearing existing cakes and resetting pagination.
+ * Then fetches the first page of cakes to refresh the list.
+ * 
+ * @async
+ * @function resetCakeList
+ * @returns {Promise<void>} Resolves when the cake list has been reset and refetched.
+ */
+const resetCakeList = async (): Promise<void> => {
+    cakeList$.cakes.set([]);
+    cakeList$.page.set(1);
+    await getCakes();
+}
+
+/**
  * Fetches the next page of cakes if there are more pages available.
  *
  * Checks the current page against the total number of pages in the store.
@@ -43,6 +57,6 @@ const getCakeNextPage = (): void => {
 }
 
 export {
-    getCakeNextPage, getCakes
+    getCakeNextPage, getCakes, resetCakeList
 };
 
