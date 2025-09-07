@@ -1,4 +1,4 @@
-import { getCakes } from "@/common/cakes";
+import { getCakeNextPage, getCakes } from "@/common/cakes";
 import CakeFilter from "@/components/bottom-sheets/cakeFilter/CakeFilter";
 import useDeleteCake from "@/hooks/cake/useDeleteCake";
 import { cakeList$, resetList } from "@/stores/cakesStore";
@@ -108,8 +108,9 @@ const CakeScreen = observer(() => {
                         <FlatList 
                             data={cakeList$.cakes.get()}
                             keyExtractor={(cake) => cake.id}
-                            onEndReached={() => getCakes()}
+                            onEndReached={getCakeNextPage}
                             onEndReachedThreshold={0.5}
+                            contentContainerStyle={styles.flatlistInset}
                             renderItem={({ item }) => (
                                 <List.Item 
                                     title={item.name} 
@@ -154,6 +155,9 @@ const styles = StyleSheet.create({
     listContainer: {
         flex: 8,
         gap: 10
+    },
+    flatlistInset: {
+        paddingBottom: 100
     },
     buttonText: {
         color: theme.colors.onPrimary

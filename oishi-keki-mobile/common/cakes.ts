@@ -26,7 +26,23 @@ const getCakes = async (): Promise<void> => {
     addCakes(newCakes);
 };
 
+/**
+ * Fetches the next page of cakes if there are more pages available.
+ *
+ * Checks the current page against the total number of pages in the store.
+ * If the current page is less than the total pages, it triggers `getCakes()` 
+ * to fetch and append the next batch of cakes.
+ *
+ * @function
+ * @returns {void}
+ */
+const getCakeNextPage = (): void => {
+    if (cakeList$.page.get() < cakeList$.totalPages.get()) {
+        getCakes();
+    }
+}
+
 export {
-    getCakes
+    getCakeNextPage, getCakes
 };
 
