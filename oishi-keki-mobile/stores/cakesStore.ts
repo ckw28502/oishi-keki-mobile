@@ -59,11 +59,22 @@ const addCakes = (newCakes: Cake[]) => {
     cakeList$.page.set(cakeList$.page.get() + 1);
 };
 
+/**
+ * Removes a cake from the local cake store by its ID.
+ *
+ * @param {string} cakeId - The ID of the cake to remove from the list.
+ */
+const deleteCake = (cakeId: string) => {
+    const updatedCakes = cakeList$.cakes.get().filter(cake => cake.id !== cakeId);
+    cakeList$.cakes.set(updatedCakes);
+};
+
 export {
     addCakes,
     CAKE_PAGE_SIZE,
     cakeList$,
     clearCakes,
+    deleteCake,
     resetList
 };
 

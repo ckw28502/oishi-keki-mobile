@@ -1,5 +1,6 @@
 import { getCakes } from "@/common/cakes";
 import CakeFilter from "@/components/bottom-sheets/cakeFilter/CakeFilter";
+import useDeleteCake from "@/hooks/cake/useDeleteCake";
 import { cakeList$, resetList } from "@/stores/cakesStore";
 import theme from "@/theme";
 import colors from "@/theme/colors";
@@ -13,6 +14,7 @@ import { Button, FAB, Icon, List, Text } from "react-native-paper";
 
 type ListItemRightProps = {
     cakeId: string;
+    cakeName: string;
 };
 
 /**
@@ -23,7 +25,9 @@ type ListItemRightProps = {
  * @param {ListItemRightProps} props - Component props
  * @returns {JSX.Element} A view with edit and delete buttons
  */
-const ListItemRight = ({ cakeId }: ListItemRightProps): JSX.Element => {
+const ListItemRight = ({ cakeId, cakeName }: ListItemRightProps): JSX.Element => {
+    const { showDeleteConfirmationDialog } = useDeleteCake(cakeId, cakeName);
+
     return (
         <View style={ListItemRightStyles.container}>
             <Link href={{ pathname: "/[cakeId]/editModal", params: { cakeId } }}>
@@ -31,7 +35,7 @@ const ListItemRight = ({ cakeId }: ListItemRightProps): JSX.Element => {
                     <Icon source="pencil" size={20} />
                 </Button>
             </Link>
-            <Button mode="contained" style={ListItemRightStyles.deleteButton}>
+            <Button mode="contained" style={ListItemRightStyles.deleteButton} onPress={showDeleteConfirmationDialog}>
                 <Icon source="delete" size={20} />
             </Button>
         </View>
@@ -110,7 +114,7 @@ const CakeScreen = observer(() => {
                                 <List.Item 
                                     title={item.name} 
                                     description={item.priceInRupiah}
-                                    right={() => <ListItemRight cakeId={item.id} />}
+                                    right={() => <ListItemRight cakeId={item.id} cakeName={item.name} />}
                                 />
                             )}
                         />
