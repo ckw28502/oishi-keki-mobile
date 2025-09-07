@@ -23,7 +23,9 @@ import { router } from "expo-router";
  * const { editCake } = useEditCake(cakeId);
  * await editCake({ name: "New Cake Name", price: 20000 });
  */
-const useEditCake = (cakeId: string): object => {
+const useEditCake = (cakeId: string): {
+    editCake: (data: CakeFormDTO) => Promise<void>;
+} => {
     const editCake = async (data: CakeFormDTO) => {
         // Send API request to update cake
         await sendEditCakeRequest(cakeId, data);
