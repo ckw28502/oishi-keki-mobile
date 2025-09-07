@@ -3,11 +3,6 @@ import Cake from "@/models/cake";
 import { observable } from "@legendapp/state";
 
 /**
- * Number of cakes per page for pagination.
- */
-const CAKE_PAGE_SIZE = 5;
-
-/**
  * Observable store for managing the cake list state.
  *
  * - `cakes`: currently loaded cakes
@@ -61,7 +56,6 @@ const addCakes = (newCakes: Cake[]) => {
 
 export {
     addCakes,
-    CAKE_PAGE_SIZE,
     cakeList$,
     clearCakes,
     resetList

@@ -1,5 +1,5 @@
 import { sendGetCakesRequest } from "@/api/cake";
-import { addCakes, CAKE_PAGE_SIZE, cakeList$ } from "@/stores/cakesStore";
+import { addCakes, cakeList$ } from "@/stores/cakesStore";
 
 /**
  * Fetches a page of cakes from the backend API using the current state
@@ -11,13 +11,14 @@ import { addCakes, CAKE_PAGE_SIZE, cakeList$ } from "@/stores/cakesStore";
  *
  * @async
  * @function getCakes
+ * @param {number} pageSize - Number of cakes to fetch per page.
  * @returns {Promise<void>} Resolves when cakes have been fetched and added to the store.
  *
  */
-const getCakes = async (): Promise<void> => {
+const getCakes = async (pageSize: number): Promise<void> => {
     const params = {
         page: cakeList$.page.get(),
-        limit: CAKE_PAGE_SIZE,
+        limit: pageSize,
         nameFilter: cakeList$.nameFilter.get(),
         sort: cakeList$.sort.get()
     };

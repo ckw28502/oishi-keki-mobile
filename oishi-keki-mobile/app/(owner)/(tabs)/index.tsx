@@ -11,6 +11,11 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Button, FAB, Icon, List, Text } from "react-native-paper";
 
+/**
+ * Number of cakes per page for pagination.
+ */
+const CAKE_PAGE_SIZE = 10;
+
 type ListItemRightProps = {
     cakeId: string;
 }
@@ -66,7 +71,7 @@ const CakeScreen = observer(() => {
 
     useEffect(() => {
         resetList();
-        getCakes();
+        getCakes(CAKE_PAGE_SIZE);
     }, []);
     
     return(
@@ -82,6 +87,8 @@ const CakeScreen = observer(() => {
                         <FlatList 
                             data={cakeList$.cakes.get()}
                             keyExtractor={(cake) => cake.id}
+                            onEndReached={() => getCakes(CAKE_PAGE_SIZE)}
+                            onEndReachedThreshold={0.5}
                             renderItem={({ item }) => (
                                 <List.Item 
                                     title={item.name} 
